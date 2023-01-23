@@ -1,0 +1,32 @@
+{
+  "theme_color": "blue",
+  "background_color": "white",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "Vykhy Finance",
+  "short_name": "Vykhy",
+  "description": "The best personal finance tracker",
+  "icons": [
+    {
+      "src": "/images/logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
