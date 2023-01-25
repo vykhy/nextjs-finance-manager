@@ -7,7 +7,7 @@ function TransactionType() {
 
   const handleSubmit = async () => {
     if (type.length < 4) {
-      setError("type should be more than 4 characters");
+      setError("type should be more than 3 characters");
       return;
     }
     const { data } = await axios.post("/api/transactiontype/create", {
