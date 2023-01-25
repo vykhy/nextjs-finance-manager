@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function TransactionType() {
+function CreateTransactionType() {
   const [type, setType] = useState("");
   const [error, setError] = useState("");
 
@@ -30,4 +30,4 @@ function TransactionType() {
   );
 }
 
-export default TransactionType;
+export default CreateTransactionType;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function CreatePaymentMethod() {
+function CreateCategory() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
@@ -10,8 +10,8 @@ function CreatePaymentMethod() {
       setError("Name should be more than 3 characters");
       return;
     }
-    const { data } = await axios.post("/api/paymentmethod/create", {
-      name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
+    const { data } = await axios.post("/api/category/create", {
+      name,
       userId: 1,
     });
     console.log(data);
@@ -31,4 +31,4 @@ function CreatePaymentMethod() {
   );
 }
 
-export default CreatePaymentMethod;
+export default CreateCategory;
