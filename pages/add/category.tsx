@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useAuthContext } from "@/context/AuthContext";
 
 function CreateCategory() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const { user } = useAuthContext();
 
   const handleSubmit = async () => {
     if (name.length < 4) {
@@ -12,7 +14,7 @@ function CreateCategory() {
     }
     const { data } = await axios.post("/api/category/create", {
       name,
-      userId: 1,
+      userId: user.id,
     });
     console.log(data);
   };
