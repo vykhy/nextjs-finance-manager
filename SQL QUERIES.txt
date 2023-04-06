@@ -1,71 +1,79 @@
-CREATE TABLE IF NOT EXISTS users (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS transactiontypes (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    type VARCHAR(155) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+CREATE TABLE project (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE IF NOT EXISTS paymentmethod (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(155) NOT NULL,
-    userid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (userid) REFERENCES users(id)
+CREATE TABLE account (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  balance DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE IF NOT EXISTS category (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(155) NOT NULL,
-    userid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (userid) REFERENCES users(id)
+CREATE TABLE category (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
-CREATE TABLE IF NOT EXISTS account(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    userid INT NOT NULL,
-    balance DOUBLE(15,2) NOT NULL DEFAULT 0,
-    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modifiedat TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (userid) REFERENCES users(id)
+CREATE TABLE transaction_type (
+  id INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS transfer(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    item VARCHAR(255) NOT NULL,
-    toaccountid INT NOT NULL,
-    fromaccountid INT NOT NULL,
-    amount DOUBLE(15,2) NOT NULL DEFAULT 0,
-    createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    modifiedat TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY (toaccountid) REFERENCES account(id),
-    FOREIGN KEY (fromaccountid) REFERENCES account (id)
+CREATE TABLE transaction (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  account_id INT NOT NULL,
+  category_id INT NOT NULL,
+  transaction_type_id INT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  description TEXT,
+  date DATETIME NOT NULL,
+  balance DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (account_id) REFERENCES account(id),
+  FOREIGN KEY (category_id) REFERENCES category(id),
+  FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(id)
 );
 
-CREATE TABLE IF NOT EXISTS transaction(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    item VARCHAR(255) NOT NULL,
-    categoryid INT NOT NULL,
-    amount DOUBLE(20, 2) NOT NULL DEFAULT 0,
-    paymentmethodid INT NOT NULL,
-    typeid INT NOT NULL,
-    accountid INT NOT NULL,
-    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    modifiedat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-    FOREIGN KEY(accountid) REFERENCES account(id),
-    FOREIGN KEY(categoryid) REFERENCES category(id),
-    FOREIGN KEY(typeid) REFERENCES transactiontypes(id),
-    FOREIGN KEY(paymentmethodid) REFERENCES paymentmethod(id)
-)
+CREATE TABLE transfer (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  from_account_id INT NOT NULL,
+  to_account_id INT NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  description TEXT,
+  date DATETIME NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id),
+  FOREIGN KEY (from_account_id) REFERENCES account(id),
+  FOREIGN KEY (to_account_id) REFERENCES account(id)
+);
+
+CREATE TABLE payment_method (
+  id INT NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user(id)
+);

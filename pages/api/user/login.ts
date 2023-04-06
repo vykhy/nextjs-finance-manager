@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   try {
     const result: Array<IUser> = await db.query(
-      "SELECT * FROM users WHERE email=?",
+      "SELECT * FROM user WHERE email=?",
       [req.body.email]
     );
     if (result.length <= 0) {

@@ -23,24 +23,29 @@ function CreateUser() {
   };
   return (
     <>
+      Name:
       <input
+        aria-label="name"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <br />
+      Email:
       <input
         type="text"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <br />
+      Password:
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
       <br />
+      Confirm Password:
       <input
         type="password"
         value={confirmPassword}
