@@ -82,3 +82,6 @@ ALTER TABLE category
 ADD COLUMN project_id INT,
 ADD CONSTRAINT fk_category_project
 FOREIGN KEY (project_id) REFERENCES project(id);
+
+ALTER TABLE account ADD COLUMN 
+  balance DECIMAL(10,2) NOT NULL DEFAULT 0;
