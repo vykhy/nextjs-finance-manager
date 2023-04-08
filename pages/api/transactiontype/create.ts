@@ -8,8 +8,8 @@ export default async function handler(
 ) {
   try {
     const result: MysqlInsert = await db.query(
-      " INSERT INTO transactiontypes (`type`) VALUES (? )",
-      [req.body.type]
+      " INSERT INTO transaction_type (`name`) VALUES (? )",
+      [req.body.name]
     );
     if (!result.insertId) {
       await db.end();
@@ -18,7 +18,7 @@ export default async function handler(
         .json({ error: "Failed to create transaction type" });
     }
     const type: Array<any> = await db.query(
-      `SELECT id, type FROM transactiontypes WHERE id = ${result.insertId}`
+      `SELECT id, name FROM transaction_type WHERE id = ${result.insertId}`
     );
     await db.end();
     res.json({ data: type[0] });

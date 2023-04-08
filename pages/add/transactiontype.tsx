@@ -2,25 +2,26 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function CreateTransactionType() {
-  const [type, setType] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (type.length < 4) {
-      setError("type should be more than 3 characters");
+    if (name.length < 3) {
+      setError("Name should be more than 3 characters");
       return;
     }
     const { data } = await axios.post("/api/transactiontype/create", {
-      type: `${type.split("")[0].toUpperCase()}${type.substring(1)}`,
+      name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
     });
     console.log(data);
   };
   return (
     <>
+      Transaction type:
       <input
         type="text"
-        value={type}
-        onChange={(e) => setType(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
       />
       <br />
       {error}

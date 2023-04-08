@@ -8,8 +8,8 @@ function CreatePaymentMethod() {
   const { user } = useAuthContext();
 
   const handleSubmit = async () => {
-    if (name.length < 4) {
-      setError("Name should be more than 3 characters");
+    if (name.length < 3) {
+      setError("Name should be more than 2 characters");
       return;
     }
     const { data } = await axios.post(

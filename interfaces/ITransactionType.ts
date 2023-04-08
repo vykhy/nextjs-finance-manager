@@ -1,6 +1,6 @@
 interface ITransactionType {
   id: number;
-  type: string;
+  name: string;
   created_at?: string | Date;
   modified_At?: string | Date;
 }
