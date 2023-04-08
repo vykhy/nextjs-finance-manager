@@ -12,14 +12,18 @@ function CreatePaymentMethod() {
       setError("Name should be more than 3 characters");
       return;
     }
-    const { data } = await axios.post("/api/paymentmethod/create", {
-      name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
-      userId: user.id,
-    });
+    const { data } = await axios.post(
+      `/api/user/${user.id}/paymentmethod/create`,
+      {
+        name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
+        userId: user.id,
+      }
+    );
     console.log(data);
   };
   return (
     <>
+      Payment method:
       <input
         name="text"
         value={name}

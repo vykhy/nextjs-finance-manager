@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   try {
     const result: MysqlInsert = await db.query(
-      " INSERT INTO paymentmethod (`name`, `userid`) VALUES (?, ? )",
+      " INSERT INTO payment_method (`name`, `user_id`) VALUES (?, ? )",
       [req.body.name, req.body.userId]
     );
     if (!result.insertId) {
@@ -18,7 +18,7 @@ export default async function handler(
         .json({ error: "Failed to create transaction type" });
     }
     const type: Array<any> = await db.query(
-      `SELECT id, name, userid FROM paymentmethod WHERE id = ${result.insertId}`
+      `SELECT id, name, user_id FROM payment_method WHERE id = ${result.insertId}`
     );
     await db.end();
     res.json({ data: type[0] });
