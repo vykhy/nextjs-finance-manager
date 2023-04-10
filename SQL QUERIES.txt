@@ -85,3 +85,14 @@ FOREIGN KEY (project_id) REFERENCES project(id);
 
 ALTER TABLE account ADD COLUMN 
   balance DECIMAL(10,2) NOT NULL DEFAULT 0;
+
+ALTER TABLE transaction
+ADD COLUMN project_id INT NOT NULL,
+ADD CONSTRAINT fk_transaction_project 
+FOREIGN KEY (project_id)
+REFERENCES project(id);
+
+ALTER TABLE transaction
+ADD COLUMN item VARCHAR(255);
+
+ALTER TABLE transaction ADD COLUMN payment_method_id INT, ADD CONSTRAINT fk_transaction_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(id);

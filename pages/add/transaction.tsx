@@ -7,13 +7,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 function AddTransaction() {
+  const projectId = 1;
   const { user } = useAuthContext();
   const [item, setItem] = useState("");
   const [amount, setAmount] = useState("");
+  const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState(null);
   const [transactionTypeId, setTransactionTypeId] = useState(null);
   const [accountId, setAccountId] = useState(null);
   const [paymentMethodId, setPaymentMethodId] = useState(0);
+  const [date, setDate] = useState(new Date());
 
   const [categories, setCategories] = useState([]);
   const [transactionTypes, setTransactionTypes] = useState([]);
@@ -21,17 +24,14 @@ function AddTransaction() {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [error, setError] = useState("");
 
-  console.log(accountId);
   useEffect(() => {
     const getEntities = async () => {
       try {
-        const { data } = await axios.post("/api/user/entities", {
-          userId: user.id,
-        });
-        setTransactionTypes(data.data.transactiontypes);
-        setCategories(data.data.categories);
-        setAccounts(data.data.accounts);
-        setPaymentMethods(data.data.paymentmethods);
+        const { data } = await axios.get(`/api/project/${projectId}/entities`);
+        setTransactionTypes(JSON.parse(data.data.transaction_types));
+        setCategories(JSON.parse(data.data.categories));
+        setAccounts(JSON.parse(data.data.accounts));
+        setPaymentMethods(JSON.parse(data.data.payment_methods));
       } catch (error: any) {
         setError(error?.response?.data?.message);
       }
@@ -42,15 +42,21 @@ function AddTransaction() {
   const handleSubmit = async () => {
     setError("");
     try {
-      const { data } = await axios.post("/api/transaction/create", {
-        item,
-        amount,
-        categoryId,
-        paymentMethodId,
-        typeId: transactionTypeId,
-        accountId,
-      });
-      console.log(data);
+      const { data } = await axios.post(
+        `/api/project/${projectId}/transaction`,
+        {
+          item,
+          amount,
+          categoryId,
+          projectId,
+          description,
+          paymentMethodId,
+          transactionTypeId,
+          accountId,
+          date,
+        }
+      );
+      console.log(data.data);
     } catch (error: any) {
       setError(error?.response?.data?.message || error.message);
     }
@@ -67,6 +73,12 @@ function AddTransaction() {
         type="text"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
+      />
+      <br />
+      <input
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <br />
       <select onChange={(e: any) => setCategoryId(e.target.value)}>
@@ -101,7 +113,7 @@ function AddTransaction() {
         </option>
         {transactionTypes.map((type: ITransactionType, i) => (
           <option value={type.id} key={i}>
-            {type.type}
+            {type.name}
           </option>
         ))}
       </select>
@@ -116,6 +128,11 @@ function AddTransaction() {
           </option>
         ))}
       </select>
+      <input
+        type={"date"}
+        value={date.toISOString().substring(0, 10)}
+        onChange={(e) => setDate(new Date(e.target.value))}
+      />
       <br />
       {error}
       <br />
