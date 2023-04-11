@@ -20,6 +20,7 @@ function CreateAccount() {
       setError("Project is required");
       return;
     }
+    console.log(user.id);
     const { data } = await axios.post(`/api/user/${user.id}/account/create`, {
       name,
       balance,

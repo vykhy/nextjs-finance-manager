@@ -42,11 +42,16 @@ function AddTransaction() {
   const handleSubmit = async () => {
     setError("");
     try {
+      const type: any = transactionTypes.find(
+        (type: ITransactionType) =>
+          Number(type.id) === Number(transactionTypeId)
+      );
+      const total = type.name === "Expense" ? Number(amount) * -1 : amount;
       const { data } = await axios.post(
         `/api/project/${projectId}/transaction`,
         {
           item,
-          amount,
+          amount: total,
           categoryId,
           projectId,
           description,
@@ -63,18 +68,21 @@ function AddTransaction() {
   };
   return (
     <>
+      Item:
       <input
         type="text"
         value={item}
         onChange={(e) => setItem(e.target.value)}
       />
       <br />
+      Amount:
       <input
         type="text"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
       <br />
+      Description:
       <input
         type="text"
         value={description}

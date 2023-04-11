@@ -96,3 +96,5 @@ ALTER TABLE transaction
 ADD COLUMN item VARCHAR(255);
 
 ALTER TABLE transaction ADD COLUMN payment_method_id INT, ADD CONSTRAINT fk_transaction_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(id);
+
+ALTER TABLE account DROP COLUMN currency;
