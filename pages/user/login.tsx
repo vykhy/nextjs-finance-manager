@@ -23,7 +23,7 @@ function Login() {
       login(data.data);
       router.push("/");
     } catch (error: any) {
-      console.log(error?.response?.data?.message);
+      console.log(error?.response?.data?.message || error.message);
     }
   };
   return (

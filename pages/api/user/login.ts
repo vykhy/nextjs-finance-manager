@@ -1,17 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
-import IUser from "@/interfaces/IUser";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const result: Array<IUser> = await db.query(
+    const [result]: Array<any> = await db.execute(
       "SELECT * FROM user WHERE email=?",
       [req.body.email]
     );
-    if (result.length <= 0) {
+    if (!result[0]) {
       return res
         .status(400)
         .json({ message: "User with this email does not exist" });
@@ -30,6 +29,7 @@ export default async function handler(
       },
     });
   } catch (error: any) {
+    console.log(error.message);
     return res.status(500).json({ error: error.message });
   }
 }

@@ -1,12 +1,10 @@
-import mysql from "serverless-mysql";
-const db = mysql({
-  config: {
-    host: process.env.MYSQL_HOST,
-    port: Number(process.env.MYSQL_PORT),
-    database: process.env.MYSQL_DATABASE,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-  },
-});
+import mysql from "mysql2/promise";
 
-export default db;
+const db = async () => {
+  const connection = await mysql.createConnection(process.env.DATABASE_URL!);
+  return connection;
+};
+
+const conn = await db();
+
+export default conn;
