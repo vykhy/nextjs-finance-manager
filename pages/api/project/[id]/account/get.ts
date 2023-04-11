@@ -9,10 +9,10 @@ export default async function handler(
 ) {
   try {
     const [accounts]: Array<any> = await db.query(
-      `SELECT * FROM account WHERE userid=?`,
-      [req.body.userId]
+      `SELECT * FROM account WHERE project_id=?`,
+      [req.query.id]
     );
-    res.json({ data: [accounts] });
+    res.json({ data: accounts });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

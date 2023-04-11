@@ -2,7 +2,6 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
-import IUser from "@/interfaces/IUser";
 
 export default function Home() {
   const { user, logout } = useAuthContext();
