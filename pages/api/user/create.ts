@@ -10,18 +10,17 @@ export default async function handler(
   const { name, email, password } = req.body;
 
   try {
-    const result: MysqlInsert = await db.query(
+    const result: Array<any> = await db.query(
       " INSERT INTO user (`name`, `email`, `password`) VALUES (? ,? , ?)",
       [name, email, password]
     );
-    if (!result.insertId) {
-      await db.end();
+    console.log(result[0]);
+    if (!result[0]?.insertId) {
       return res.status(500).json({ error: "Failed to create user" });
     }
-    const user: Array<any> = await db.query(
-      `SELECT id, name, email FROM user WHERE id = ${result.insertId}`
+    const [user]: Array<any> = await db.query(
+      `SELECT id, name, email FROM user WHERE id = ${result[0].insertId}`
     );
-    await db.end();
     res.json({ data: user[0] as IUser });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });

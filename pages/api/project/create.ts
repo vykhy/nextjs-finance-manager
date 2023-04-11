@@ -8,18 +8,16 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { user_id, name, description } = req.body as IProject;
-    const result: any = await db.query(
+    const [result]: any = await db.query(
       "INSERT INTO project (user_id, name, description) VALUES (?, ?, ?)",
       [user_id, name, description]
     );
-    if (!result.insertId) {
-      await db.end();
+    if (!result?.insertId) {
       return res.status(500).json({ error: "Failed to create project" });
     }
-    const project: Array<any> = await db.query(
+    const [project]: Array<any> = await db.query(
       `SELECT user_id, name, description FROM project WHERE id = ${result.insertId}`
     );
-    await db.end();
     res.json({ data: project[0] as IProject });
   } else {
     res.status(405).end();

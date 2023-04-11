@@ -19,11 +19,12 @@ function CreateCategory() {
       setError("Project is required");
       return;
     }
-    const { data } = await axios.post("/api/category/create", {
-      name,
-      projectId: project,
-      userId: user.id,
-    });
+    const { data } = await axios.post(
+      `/api/project/${project}/category/create`,
+      {
+        name,
+      }
+    );
     console.log(data);
   };
   return (

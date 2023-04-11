@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
-import MysqlInsert from "@/interfaces/MysqlInsert";
-import IMysqlUpdate from "@/interfaces/IMysqlUpdate";
+import format from "date-fns/format";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +18,7 @@ export default async function handler(
     date,
   } = req.body;
   try {
-    const result: MysqlInsert = await db.query(
+    const [result]: any = await db.query(
       ` INSERT INTO transaction (account_id, category_id, transaction_type_id, item, amount, description, 
         payment_method_id, project_id, user_id, balance, date)
         VALUES 
@@ -39,22 +38,21 @@ export default async function handler(
         projectId,
         accountId,
         amount,
-        date,
+        format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
       ]
     );
     if (!result.insertId) {
-      await db.end();
       return res.status(500).json({ error: "Failed to add transaction" });
     }
-    const account: IMysqlUpdate = await db.query(
-      `UPDATE account SET balance = (SELECT balance FROM account WHERE id = ?) + ? WHERE id = ? ;`,
-      [accountId, amount, accountId]
+    const [account]: any = await db.query(
+      `UPDATE account SET balance = balance + ? WHERE id = ? ;`,
+      [amount, accountId]
     );
     if (account.changedRows <= 0) {
       await db.query(`DELETE FROM transaction WHERE id = ?`, [result.insertId]);
       return res.status(500).json({ error: "Failed to add transaction" });
     }
-    const transaction: Array<any> = await db.query(
+    const [transactions]: Array<any> = await db.query(
       `SELECT A.id, A.amount, A.item, A.description, B.name as category, C.name as transactiontype, D.name as account, D.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
       FROM transaction A
       INNER JOIN category B on B.id=A.category_id
@@ -65,10 +63,8 @@ export default async function handler(
       INNER JOIN user G ON G.id = A.user_id
       WHERE A.id = ${result.insertId}`
     );
-    await db.end();
-    res.json({ data: transaction[0] });
+    res.json({ data: transactions[0] });
   } catch (error: any) {
-    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 }

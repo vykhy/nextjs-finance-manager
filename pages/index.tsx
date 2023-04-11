@@ -5,7 +5,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import IUser from "@/interfaces/IUser";
 
 export default function Home() {
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
   return (
     <>
       <Head>
@@ -25,6 +25,7 @@ export default function Home() {
             <Link href={"/add/project"}>Add Project</Link>
             <Link href={"/add/paymentmethod"}>Add Payment Method</Link>
             <Link href={"/add/transactiontype"}>Add Transaction Type</Link>
+            <button onClick={logout}>Log out</button>
           </>
         ) : (
           <>

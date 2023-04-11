@@ -107,7 +107,6 @@ CREATE TABLE project (
 
 CREATE TABLE account (
   id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
   project_id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
   balance DECIMAL(10,2) NOT NULL,
@@ -118,7 +117,6 @@ CREATE TABLE account (
 
 CREATE TABLE category (
   id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
   project_id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
   PRIMARY KEY (id),

@@ -8,12 +8,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const accounts: Array<IAccount> = await db.query(
+    const [accounts]: Array<any> = await db.query(
       `SELECT * FROM account WHERE userid=?`,
       [req.body.userId]
     );
-    await db.end();
-    res.json({ data: accounts });
+    res.json({ data: [accounts] });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }

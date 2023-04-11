@@ -46,7 +46,7 @@ function AddTransaction() {
         (type: ITransactionType) =>
           Number(type.id) === Number(transactionTypeId)
       );
-      const total = type.name === "Expense" ? Number(amount) * -1 : amount;
+      const total = type.is_negative ? Number(amount) * -1 : amount;
       const { data } = await axios.post(
         `/api/project/${projectId}/transaction`,
         {
