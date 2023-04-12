@@ -24,6 +24,7 @@ export default function Home() {
             <Link href={"/add/project"}>Add Project</Link>
             <Link href={"/add/paymentmethod"}>Add Payment Method</Link>
             <Link href={"/add/transactiontype"}>Add Transaction Type</Link>
+            <Link href={"/add/correction"}>Make Correction</Link>
             <button onClick={logout}>Log out</button>
           </>
         ) : (
