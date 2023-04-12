@@ -12,9 +12,7 @@ export default async function handler(
       [req.body.name, req.body.userId]
     );
     if (!result.insertId) {
-      return res
-        .status(500)
-        .json({ error: "Failed to create transaction type" });
+      return res.status(500).json({ error: "Failed to add payment method" });
     }
     const [methods]: Array<any> = await db.query(
       `SELECT id, name, user_id FROM payment_method WHERE id = ${result.insertId}`

@@ -40,22 +40,18 @@ export default async function handler(
 
     // Add transaction entries for both accounts
     const [senderTransaction]: any = await db.query(
-      `INSERT INTO transaction (user_id, account_id, amount, item, description, date, balance, project_id)
+      `INSERT INTO transaction ( account_id, amount, item, description, date, balance)
       VALUES(
-        (SELECT user_id FROM project WHERE id = ?),
          ?, ?, ?, ?, ?,
-        ( SELECT balance - ? FROM account WHERE id = ?),
-          ?)`,
+        ( SELECT balance - ? FROM account WHERE id = ?))`,
       [
-        projectId,
         fromAccountId,
         amount * -1,
-        "transfer",
+        "TRANSFER",
         description,
         format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
         amount,
         fromAccountId,
-        projectId,
       ]
     );
     if (!senderTransaction.insertId) {
@@ -66,22 +62,18 @@ export default async function handler(
     }
     // Add transaction entries for both accounts
     const [receiverTransaction]: any = await db.query(
-      `INSERT INTO transaction (user_id, account_id, amount, item, description, date, balance, project_id)
+      `INSERT INTO transaction (account_id, amount, item, description, date, balance)
       VALUES(
-        (SELECT user_id FROM project WHERE id = ?),
          ?, ?, ?, ?, ?,
-         (SELECT balance + ? FROM account WHERE id = ?),
-          ?)`,
+         (SELECT balance + ? FROM account WHERE id = ?))`,
       [
-        projectId,
         toAccountId,
         amount,
-        "transfer",
+        "TRANSFER",
         description,
         format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
         amount,
         toAccountId,
-        projectId,
       ]
     );
     if (!receiverTransaction.insertId) {

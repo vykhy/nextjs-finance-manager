@@ -52,7 +52,6 @@ CREATE TABLE payment_method (
 
 CREATE TABLE transaction (
   id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
   account_id INT NOT NULL,
   category_id INT NOT NULL,
   transaction_type_id INT NOT NULL,
@@ -61,13 +60,10 @@ CREATE TABLE transaction (
   description TEXT,
   date DATETIME NOT NULL,
   balance DECIMAL(10,2) NOT NULL,
-  project_id INT NOT NULL,
   payment_method_id INT,
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (account_id) REFERENCES account(id),
   FOREIGN KEY (category_id) REFERENCES category(id),
-  FOREIGN KEY (project_id) REFERENCES project(id),
   FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(id),
   FOREIGN KEY (payment_method_id) REFERENCES payment_method(id)
 );
@@ -140,7 +136,6 @@ CREATE TABLE payment_method (
 
 CREATE TABLE transaction (
   id INT NOT NULL AUTO_INCREMENT,
-  user_id INT NOT NULL,
   account_id INT NOT NULL,
   category_id INT NOT NULL,
   transaction_type_id INT NOT NULL,
@@ -149,13 +144,10 @@ CREATE TABLE transaction (
   description TEXT,
   date DATETIME NOT NULL,
   balance DECIMAL(10,2) NOT NULL,
-  project_id INT NOT NULL,
   payment_method_id INT,
   PRIMARY KEY (id),
-   KEY user_id_idx (user_id),
   KEY account_id_idx(account_id),
   KEY category_id_idx(category_id),
- KEY project_id_idx (project_id),
   KEY transaction_type_id_idx(transaction_type_id),
   KEY payment_method_id_idx(payment_method_id)
 );

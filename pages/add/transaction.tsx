@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 
 function AddTransaction() {
   const projectId = 1;
-  const { user } = useAuthContext();
   const [item, setItem] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");

@@ -20,10 +20,9 @@ export default async function handler(
   try {
     const [result]: any = await db.query(
       ` INSERT INTO transaction (account_id, category_id, transaction_type_id, item, amount, description, 
-        payment_method_id, project_id, user_id, balance, date)
+        payment_method_id, balance, date)
         VALUES 
-        (?, ?, ?, ?, ?, ? ,?,?,
-          (SELECT user_id FROM project WHERE id =  ?),
+        (?, ?, ?, ?, ?, ? ,?,
           (SELECT balance FROM account WHERE id = ?) + ?,
         ?);`,
       [
@@ -34,8 +33,6 @@ export default async function handler(
         amount,
         description,
         paymentMethodId,
-        projectId,
-        projectId,
         accountId,
         amount,
         format(new Date(date), "yyyy-MM-dd HH:mm:ss"),
@@ -59,8 +56,8 @@ export default async function handler(
       INNER JOIN transaction_type C on C.id=A.transaction_type_id
       INNER JOIN account D on D.id=A.account_id
       INNER JOIN payment_method E on E.id=A.payment_method_id
-      INNER JOIN project F ON F.id=A.project_id
-      INNER JOIN user G ON G.id = A.user_id
+      INNER JOIN project F ON F.id=D.project_id
+      INNER JOIN user G ON G.id = F.user_id
       WHERE A.id = ${result.insertId}`
     );
     res.json({ data: transactions[0] });

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
-import MysqlInsert from "@/interfaces/MysqlInsert";
 
 export default async function handler(
   req: NextApiRequest,

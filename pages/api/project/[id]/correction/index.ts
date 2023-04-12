@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
-import IProject from "@/interfaces/IProject";
 import { format } from "date-fns";
 
 type CorrectionRequestData = {
@@ -27,14 +26,10 @@ export default async function handler(
 
       // Update transaction table with correction entry
       const [transactionResult]: any = await db.query(
-        `INSERT INTO transaction (user_id, project_id, account_id, item, balance, amount, description, date)
-      VALUES (
-        (SELECT user.id FROM user INNER JOIN project ON project.user_id = user.id WHERE project.id = ?),
-        ?, ?, 'CORRECTION', (SELECT (? - balance) FROM account WHERE id = ? ), ?,
+        `INSERT INTO transaction ( account_id, item, balance, amount, description, date)
+      VALUES ( ?, 'CORRECTION', (SELECT (? - balance) FROM account WHERE id = ? ), ?,
         'Balance correction', ?);`,
         [
-          projectId,
-          projectId,
           accountId,
           endBalance,
           accountId,
