@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import { useAuthContext } from "@/context/AuthContext";
 import IAccount from "@/interfaces/IAccount";
 import axios from "axios";
@@ -56,7 +57,7 @@ function transfer() {
   };
 
   return (
-    <>
+    <Layout>
       Description:
       <input
         type="text"
@@ -99,7 +100,7 @@ function transfer() {
       <br />
       {error}
       <button onClick={handleSubmit}>Add</button>
-    </>
+    </Layout>
   );
 }
 

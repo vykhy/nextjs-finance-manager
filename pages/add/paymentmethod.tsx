@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "@/context/AuthContext";
+import Layout from "@/components/Layout";
 
 function CreatePaymentMethod() {
   const [name, setName] = useState("");
@@ -23,16 +24,18 @@ function CreatePaymentMethod() {
   };
   return (
     <>
-      Payment method:
-      <input
-        name="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br />
-      {error}
-      <br />
-      <button onClick={handleSubmit}>Create</button>
+      <Layout>
+        Payment method:
+        <input
+          name="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        {error}
+        <br />
+        <button onClick={handleSubmit}>Create</button>
+      </Layout>
     </>
   );
 }

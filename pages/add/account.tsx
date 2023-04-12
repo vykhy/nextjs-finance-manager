@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "@/context/AuthContext";
 import { useProjects } from "@/hooks/project";
+import Layout from "@/components/Layout";
 
 function CreateAccount() {
   const { user } = useAuthContext();
@@ -31,41 +32,43 @@ function CreateAccount() {
   };
   return (
     <>
-      Name:
-      <input
-        name="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br />
-      Balance:
-      <input
-        name="text"
-        value={balance}
-        onChange={(e) => {
-          if (!RegExp(/^[+]?((\d+(\.\d*)?)|(\.\d+))$/).test(e.target.value)) {
-            return;
-          }
-          setBalance(e.target.value);
-        }}
-      />
-      <br />
-      Project:
-      <select
-        value={projectId ?? ""}
-        onChange={(e) => setProjectId(Number(e.target.value))}
-      >
-        <option value="">-- Select Project --</option>
-        {projects.map((project) => (
-          <option key={project.id} value={project.id}>
-            {project.name}
-          </option>
-        ))}
-      </select>
-      <br />
-      {error}
-      <br />
-      <button onClick={handleSubmit}>Create</button>
+      <Layout>
+        Name:
+        <input
+          name="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        Balance:
+        <input
+          name="text"
+          value={balance}
+          onChange={(e) => {
+            if (!RegExp(/^[+]?((\d+(\.\d*)?)|(\.\d+))$/).test(e.target.value)) {
+              return;
+            }
+            setBalance(e.target.value);
+          }}
+        />
+        <br />
+        Project:
+        <select
+          value={projectId ?? ""}
+          onChange={(e) => setProjectId(Number(e.target.value))}
+        >
+          <option value="">-- Select Project --</option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>
+              {project.name}
+            </option>
+          ))}
+        </select>
+        <br />
+        {error}
+        <br />
+        <button onClick={handleSubmit}>Create</button>
+      </Layout>
     </>
   );
 }

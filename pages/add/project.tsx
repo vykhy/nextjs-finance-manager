@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "@/context/AuthContext";
+import Layout from "@/components/Layout";
 
 const NewProjectPage = () => {
   const [name, setName] = useState<string>("");
@@ -23,27 +24,29 @@ const NewProjectPage = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          id="name"
-          type="text"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-      </div>
-      <button type="submit">Create Project</button>
-    </form>
+    <Layout>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+          />
+        </div>
+        <button type="submit">Create Project</button>
+      </form>
+    </Layout>
   );
 };
 

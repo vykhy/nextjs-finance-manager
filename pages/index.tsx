@@ -2,6 +2,8 @@ import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
+import SwipeableTemporaryDrawer from "@/components/SwipeableDrawer";
+import Layout from "@/components/Layout";
 
 export default function Home() {
   const { user, logout } = useAuthContext();
@@ -16,16 +18,17 @@ export default function Home() {
       <main className={styles.main}>
         {user ? (
           <>
-            Hello {user.name}
-            <Link href={"/add/account"}>Add Account</Link>
-            <Link href={"/add/category"}>Add Category</Link>
-            <Link href={"/add/transaction"}>Add Transaction</Link>
-            <Link href={"/add/transfer"}>Transfer</Link>
-            <Link href={"/add/project"}>Add Project</Link>
-            <Link href={"/add/paymentmethod"}>Add Payment Method</Link>
-            <Link href={"/add/transactiontype"}>Add Transaction Type</Link>
-            <Link href={"/add/correction"}>Make Correction</Link>
-            <button onClick={logout}>Log out</button>
+            <Layout>
+              Hello {user.name}
+              <Link href={"/add/account"}>Add Account</Link>
+              <Link href={"/add/category"}>Add Category</Link>
+              <Link href={"/add/transaction"}>Add Transaction</Link>
+              <Link href={"/add/transfer"}>Transfer</Link>
+              <Link href={"/add/project"}>Add Project</Link>
+              <Link href={"/add/paymentmethod"}>Add Payment Method</Link>
+              <Link href={"/add/transactiontype"}>Add Transaction Type</Link>
+              <Link href={"/add/correction"}>Make Correction</Link>
+            </Layout>
           </>
         ) : (
           <>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Layout from "@/components/Layout";
 
 function CreateTransactionType() {
   const [name, setName] = useState("");
@@ -18,7 +19,7 @@ function CreateTransactionType() {
     console.log(data);
   };
   return (
-    <>
+    <Layout>
       Transaction type:
       <input
         type="text"
@@ -37,7 +38,7 @@ function CreateTransactionType() {
       {error}
       <br />
       <button onClick={handleSubmit}>Create</button>
-    </>
+    </Layout>
   );
 }
 

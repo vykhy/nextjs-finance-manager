@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import { useAuthContext } from "@/context/AuthContext";
 import IAccount from "@/interfaces/IAccount";
 import ICategory from "@/interfaces/ICategory";
@@ -67,83 +68,85 @@ function AddTransaction() {
   };
   return (
     <>
-      Item:
-      <input
-        type="text"
-        value={item}
-        onChange={(e) => setItem(e.target.value)}
-      />
-      <br />
-      Amount:
-      <input
-        type="text"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <br />
-      Description:
-      <input
-        type="text"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <br />
-      <select onChange={(e: any) => setCategoryId(e.target.value)}>
-        <option value="none" selected disabled hidden>
-          Select a category
-        </option>
-        {categories.map((category: ICategory, i) => (
-          <option value={category.id} key={i}>
-            {category.name}
+      <Layout>
+        Item:
+        <input
+          type="text"
+          value={item}
+          onChange={(e) => setItem(e.target.value)}
+        />
+        <br />
+        Amount:
+        <input
+          type="text"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+        <br />
+        Description:
+        <input
+          type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <br />
+        <select onChange={(e: any) => setCategoryId(e.target.value)}>
+          <option value="none" selected disabled hidden>
+            Select a category
           </option>
-        ))}
-      </select>
-      <br />
-      <select
-        onChange={(e: any) => {
-          setAccountId(e.target.value);
-        }}
-      >
-        <option value="none" selected disabled hidden>
-          Select an account
-        </option>
-        {accounts.map((account: IAccount, i) => (
-          <option value={account.id} key={i}>
-            {account.name}
+          {categories.map((category: ICategory, i) => (
+            <option value={category.id} key={i}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+        <br />
+        <select
+          onChange={(e: any) => {
+            setAccountId(e.target.value);
+          }}
+        >
+          <option value="none" selected disabled hidden>
+            Select an account
           </option>
-        ))}
-      </select>
-      <br />
-      <select onChange={(e: any) => setTransactionTypeId(e.target.value)}>
-        <option value="none" selected disabled hidden>
-          Select transaction type
-        </option>
-        {transactionTypes.map((type: ITransactionType, i) => (
-          <option value={type.id} key={i}>
-            {type.name}
+          {accounts.map((account: IAccount, i) => (
+            <option value={account.id} key={i}>
+              {account.name}
+            </option>
+          ))}
+        </select>
+        <br />
+        <select onChange={(e: any) => setTransactionTypeId(e.target.value)}>
+          <option value="none" selected disabled hidden>
+            Select transaction type
           </option>
-        ))}
-      </select>
-      <br />
-      <select onChange={(e: any) => setPaymentMethodId(e.target.value)}>
-        <option value="none" selected disabled hidden>
-          Select payment method
-        </option>
-        {paymentMethods.map((method: IPaymentMethod, i) => (
-          <option value={method.id} key={i}>
-            {method.name}
+          {transactionTypes.map((type: ITransactionType, i) => (
+            <option value={type.id} key={i}>
+              {type.name}
+            </option>
+          ))}
+        </select>
+        <br />
+        <select onChange={(e: any) => setPaymentMethodId(e.target.value)}>
+          <option value="none" selected disabled hidden>
+            Select payment method
           </option>
-        ))}
-      </select>
-      <input
-        type={"date"}
-        value={date.toISOString().substring(0, 10)}
-        onChange={(e) => setDate(new Date(e.target.value))}
-      />
-      <br />
-      {error}
-      <br />
-      <button onClick={handleSubmit}>Create</button>
+          {paymentMethods.map((method: IPaymentMethod, i) => (
+            <option value={method.id} key={i}>
+              {method.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type={"date"}
+          value={date.toISOString().substring(0, 10)}
+          onChange={(e) => setDate(new Date(e.target.value))}
+        />
+        <br />
+        {error}
+        <br />
+        <button onClick={handleSubmit}>Create</button>
+      </Layout>
     </>
   );
 }

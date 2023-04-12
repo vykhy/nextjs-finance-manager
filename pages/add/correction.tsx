@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Layout from "@/components/Layout";
 
 interface Account {
   id: number;
@@ -63,49 +64,51 @@ export default function CorrectionPage() {
   }
 
   return (
-    <div>
-      <h1>Submit Correction</h1>
-      {errorMessage && <p>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="accountId">Account:</label>
-          <select
-            id="accountId"
-            name="accountId"
-            value={formData.accountId}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="" selected hidden>
-              Select an account
-            </option>
-            {accounts?.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.name}
+    <Layout>
+      <div>
+        <h1>Submit Correction</h1>
+        {errorMessage && <p>{errorMessage}</p>}
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="accountId">Account:</label>
+            <select
+              id="accountId"
+              name="accountId"
+              value={formData.accountId}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="" selected hidden>
+                Select an account
               </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="endBalance">End Balance:</label>
-          <input
-            type="number"
-            id="endBalance"
-            name="endBalance"
-            value={formData.endBalance}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type={"date"}
-            value={formData.date.toISOString().substring(0, 10)}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+              {accounts?.map((account) => (
+                <option key={account.id} value={account.id}>
+                  {account.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="endBalance">End Balance:</label>
+            <input
+              type="number"
+              id="endBalance"
+              name="endBalance"
+              value={formData.endBalance}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              type={"date"}
+              value={formData.date.toISOString().substring(0, 10)}
+              onChange={handleInputChange}
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </Layout>
   );
 }
