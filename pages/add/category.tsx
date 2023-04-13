@@ -54,7 +54,7 @@ function CreateCategory() {
             <Typography component="h1" variant="h5">
               {
                 projects?.find((pro: IProject) => pro.id === selectedProject)
-                  .name
+                  ?.name
               }
             </Typography>
             <Box sx={{ mt: 1 }}>

@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import { useProjectContext } from "@/context/ProjectContext";
 import IAccount from "@/interfaces/IAccount";
 import ICategory from "@/interfaces/ICategory";
+import IProject from "@/interfaces/IProject";
 import IPaymentMethod from "@/interfaces/IPaymentMethod";
 import ITransactionType from "@/interfaces/ITransactionType";
 import axios from "axios";
@@ -21,7 +22,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 
 function AddTransaction() {
-  const { selectedProject } = useProjectContext();
+  const { projects, selectedProject } = useProjectContext();
   const [item, setItem] = useState("");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
@@ -97,7 +98,10 @@ function AddTransaction() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Add Transaction
+              {
+                projects?.find((pro: IProject) => pro.id === selectedProject)
+                  ?.name
+              }
             </Typography>
             <Box sx={{ mt: 1 }}>
               <TextField
