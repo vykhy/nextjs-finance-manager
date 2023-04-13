@@ -1,7 +1,8 @@
 interface IAccount {
   id: number;
   name: string;
-  userid: number;
+  project_id: number;
+  balance: number;
   createdat?: string | Date;
   modifiedat?: string | Date;
 }

@@ -13,6 +13,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { useAuthContext } from "@/context/AuthContext";
 import { useProjectContext } from "@/context/ProjectContext";
 import IProject from "@/interfaces/IProject";
+import MenuIcon from "@mui/icons-material/Menu";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
@@ -57,7 +58,7 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {projects.map((item: IProject, index: number) => (
+        {projects?.map((item: IProject, index: number) => (
           <ListItem key={item.name} disablePadding>
             <ListItemButton
               selected={selectedProject === item.id}
@@ -91,7 +92,12 @@ export default function SwipeableTemporaryDrawer() {
     <div>
       {(["left"] as const).map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
+          <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={toggleDrawer(anchor, true)}>
+              <MenuIcon />
+            </Button>
+          </Box>
+
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}

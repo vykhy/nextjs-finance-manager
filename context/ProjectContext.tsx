@@ -12,7 +12,7 @@ const ProjectContextProvider: React.FC<ProjectContextProps> = ({
   children,
 }) => {
   const { user } = useAuthContext();
-  const { projects } = useProjects(user.id);
+  const { projects } = useProjects(user?.id);
   const [selectedProject, setSelectedProject] = useState(projects[0]?.id);
 
   return (

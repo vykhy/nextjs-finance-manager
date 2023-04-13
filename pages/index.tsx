@@ -1,12 +1,12 @@
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
-import SwipeableTemporaryDrawer from "@/components/SwipeableDrawer";
 import Layout from "@/components/Layout";
+import ProjectContextProvider from "@/context/ProjectContext";
+import HomePage from "@/components/HomePage";
 
 export default function Home() {
-  const { user, logout } = useAuthContext();
+  const { user } = useAuthContext();
   return (
     <>
       <Head>
@@ -15,20 +15,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
+      <main>
         {user ? (
           <>
-            <Layout>
-              Hello {user.name}
-              <Link href={"/add/account"}>Add Account</Link>
-              <Link href={"/add/category"}>Add Category</Link>
-              <Link href={"/add/transaction"}>Add Transaction</Link>
-              <Link href={"/add/transfer"}>Transfer</Link>
-              <Link href={"/add/project"}>Add Project</Link>
-              <Link href={"/add/paymentmethod"}>Add Payment Method</Link>
-              <Link href={"/add/transactiontype"}>Add Transaction Type</Link>
-              <Link href={"/add/correction"}>Make Correction</Link>
-            </Layout>
+            <ProjectContextProvider>
+              <Layout>
+                <HomePage />
+              </Layout>
+            </ProjectContextProvider>
           </>
         ) : (
           <>
