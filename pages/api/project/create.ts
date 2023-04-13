@@ -16,7 +16,7 @@ export default async function handler(
       return res.status(500).json({ error: "Failed to create project" });
     }
     const [project]: Array<any> = await db.query(
-      `SELECT user_id, name, description FROM project WHERE id = ${result.insertId}`
+      `SELECT id, user_id, name, description FROM project WHERE id = ${result.insertId}`
     );
     res.json({ data: project[0] as IProject });
   } else {

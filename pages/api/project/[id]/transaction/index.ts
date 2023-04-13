@@ -6,7 +6,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id: projectId } = req.query;
   const {
     accountId,
     transactionTypeId,

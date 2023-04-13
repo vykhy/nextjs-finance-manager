@@ -1,25 +1,40 @@
 import Layout from "@/components/Layout";
-import { useAuthContext } from "@/context/AuthContext";
 import IAccount from "@/interfaces/IAccount";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { useProjectContext } from "@/context/ProjectContext";
+import IProject from "@/interfaces/IProject";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 function transfer() {
-  const { user } = useAuthContext();
-  const projectId = 1;
-  const [fromAccountId, setFromAccountId] = useState<any>(null);
-  const [toAccountId, setToAccountId] = useState<any>(null);
+  const [fromAccountId, setFromAccountId] = useState<any>("");
+  const [toAccountId, setToAccountId] = useState<any>("");
   const [item, setItem] = useState("");
   const [amount, setAmount] = useState("");
+  const { projects, selectedProject } = useProjectContext();
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<any>(dayjs(Date.now()));
 
   const [error, setError] = useState("");
   const [accounts, setAccounts] = useState([]);
 
   useEffect(() => {
     const getAccounts = async () => {
-      const { data } = await axios.get(`/api/project/${projectId}/account/get`);
+      const { data } = await axios.get(
+        `/api/project/${selectedProject}/account/get`
+      );
       setAccounts(data.data);
     };
     try {
@@ -27,7 +42,7 @@ function transfer() {
     } catch (error: any) {
       setError(error?.response?.data?.message || error.message);
     }
-  }, []);
+  }, [selectedProject]);
 
   const handleSubmit = async () => {
     if (fromAccountId === toAccountId) {
@@ -40,7 +55,7 @@ function transfer() {
     }
     try {
       const { data } = await axios.post(
-        `/api/project/${projectId}/transfer/create`,
+        `/api/project/${selectedProject}/transfer/create`,
         {
           item,
           amount,
@@ -58,48 +73,117 @@ function transfer() {
 
   return (
     <Layout>
-      Description:
-      <input
-        type="text"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <br />
-      Amount:
-      <input
-        type="text"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <br />
-      Receiver Account:{" "}
-      <select onChange={(e: any) => setToAccountId(e.target.value)}>
-        <option selected value={"none"} hidden disabled>
-          Select receiving account
-        </option>
-        {accounts.map((account: IAccount, i) => (
-          <option value={account.id}>{account.name}</option>
-        ))}
-      </select>
-      <br />
-      Sender account:{" "}
-      <select onChange={(e: any) => setFromAccountId(e.target.value)}>
-        <option selected value={"none"} hidden disabled>
-          Select sending account
-        </option>
-        {accounts.map((account: IAccount, i) => (
-          <option value={account.id}>{account.name}</option>
-        ))}
-      </select>
-      <br />
-      <input
-        type={"date"}
-        value={date.toISOString().substring(0, 10)}
-        onChange={(e) => setDate(new Date(e.target.value))}
-      />
-      <br />
-      {error}
-      <button onClick={handleSubmit}>Add</button>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            {
+              projects?.find((pro: IProject) => pro.id === selectedProject)
+                ?.name
+            }
+          </Typography>
+          <Box sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              value={item}
+              onChange={(e) => setItem(e.target.value)}
+              label="Item"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              label="Description"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              label="Amount"
+              value={amount}
+              onChange={(e: any) => {
+                if (
+                  !RegExp(/^[+]?((\d+(\.\d*)?)|(\.\d+))$/).test(
+                    e.target.value
+                  ) &&
+                  e.target.value !== ""
+                ) {
+                  return;
+                }
+                setAmount(e.target.value);
+              }}
+            />
+            <InputLabel id="demo-simple-select-label">
+              Sender Account
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={fromAccountId}
+              label="Sender Account"
+              fullWidth
+              onChange={(e: any) => setFromAccountId(e.target.value)}
+            >
+              {accounts?.length &&
+                accounts.map((account: IAccount, i) => (
+                  <MenuItem key={account.id} value={account.id}>
+                    {account.name}
+                  </MenuItem>
+                ))}
+            </Select>
+            <InputLabel id="demo-simple-select-label">
+              Receiver Account
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={toAccountId}
+              fullWidth
+              label="Receiver account"
+              onChange={(e: any) => setToAccountId(e.target.value)}
+            >
+              {accounts?.length &&
+                accounts.map((account: IAccount, i) => (
+                  <MenuItem key={account.id} value={account.id}>
+                    {account.name}
+                  </MenuItem>
+                ))}
+            </Select>
+            <Box>
+              <Typography>Date: </Typography>
+              <DatePicker
+                value={date}
+                onChange={(newValue) => setDate(newValue)}
+              />
+            </Box>
+
+            {error && error}
+            <Button
+              type="button"
+              onClick={handleSubmit}
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Transfer
+            </Button>
+          </Box>
+        </Box>
+      </Container>
     </Layout>
   );
 }

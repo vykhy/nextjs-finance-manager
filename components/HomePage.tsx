@@ -14,11 +14,11 @@ import Link from "next/link";
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
-  const { accounts, loading, error } = useAccounts(selectedProject);
-
-  if (loading) {
-    return <div>Loading accounts...</div>;
-  }
+  const {
+    accounts,
+    loading: loadingAccounts,
+    error,
+  } = useAccounts(selectedProject);
 
   if (error) {
     return <div>Error loading accounts.</div>;
@@ -30,7 +30,9 @@ const HomePage = () => {
       <Divider />
       <h3>Accounts</h3>
       <List>
-        {accounts.length ? (
+        {loadingAccounts ? (
+          "Loading accounts..."
+        ) : accounts.length ? (
           accounts.map((account: IAccount) => (
             <ListItem disablePadding>
               <ListItemButton>
@@ -87,6 +89,10 @@ const navItems = [
   {
     link: "category",
     text: "Add Category",
+  },
+  {
+    link: "transaction",
+    text: "Add Transaction",
   },
   {
     link: "transfer",

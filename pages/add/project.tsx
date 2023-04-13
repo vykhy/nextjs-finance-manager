@@ -1,51 +1,78 @@
-// pages/projects/new.tsx
-import { useState } from "react";
-import axios from "axios";
-import { useAuthContext } from "@/context/AuthContext";
 import Layout from "@/components/Layout";
+import axios from "axios";
+import React, { useState } from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { useProjectContext } from "@/context/ProjectContext";
+import IProject from "@/interfaces/IProject";
 
 const NewProjectPage = () => {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const { user } = useAuthContext();
+  const { projects, selectedProject, addProject } = useProjectContext();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("/api/project/create", {
-        user_id: user.id,
-        name,
-        description,
-      });
-      console.log(data);
+      const form = new FormData(event.currentTarget);
+      const name = form.get("name");
+      const description = form.get("description");
+      const data = await addProject(name, description);
     } catch (error: any) {
+      setError(error.message);
       console.log(error);
     }
   };
 
   return (
     <Layout>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="description">Description:</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-          />
-        </div>
-        <button type="submit">Create Project</button>
-      </form>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            {
+              projects?.find((pro: IProject) => pro.id === selectedProject)
+                ?.name
+            }
+          </Typography>
+          <Box component={"form"} onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <TextField margin="normal" required fullWidth name="name" />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="description"
+              multiline
+              label="Description"
+            />
+            {error && error}
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Create Project
+            </Button>
+          </Box>
+        </Box>
+      </Container>
     </Layout>
   );
 };

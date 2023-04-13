@@ -1,9 +1,8 @@
 import Head from "next/head";
-import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
 import Layout from "@/components/Layout";
-import ProjectContextProvider from "@/context/ProjectContext";
 import HomePage from "@/components/HomePage";
+import SignIn from "@/components/SignIn";
 
 export default function Home() {
   const { user } = useAuthContext();
@@ -18,16 +17,13 @@ export default function Home() {
       <main>
         {user ? (
           <>
-            <ProjectContextProvider>
-              <Layout>
-                <HomePage />
-              </Layout>
-            </ProjectContextProvider>
+            <Layout>
+              <HomePage />
+            </Layout>
           </>
         ) : (
           <>
-            <Link href={"/user/create"}>Sign up as a new user</Link>
-            <Link href={"/user/login"}>Log in</Link>
+            <SignIn />
           </>
         )}
       </main>

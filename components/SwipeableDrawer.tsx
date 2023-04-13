@@ -59,7 +59,7 @@ export default function SwipeableTemporaryDrawer() {
     >
       <List>
         {projects?.map((item: IProject, index: number) => (
-          <ListItem key={item.name} disablePadding>
+          <ListItem key={index} disablePadding>
             <ListItemButton
               selected={selectedProject === item.id}
               onClick={(event) => handleListItemClick(event, item.id)}

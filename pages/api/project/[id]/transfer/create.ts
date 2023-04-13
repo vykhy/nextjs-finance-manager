@@ -6,8 +6,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id: projectId } = req.query;
-  const { fromAccountId, toAccountId, amount, description, date } = req.body;
+  const { fromAccountId, toAccountId, description, date } = req.body;
+  let amount = req.body.amount;
+  amount = Number(amount).toFixed(2);
 
   try {
     // Check sender's account balance

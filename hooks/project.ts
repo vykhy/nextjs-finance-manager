@@ -8,6 +8,7 @@ export const useProjects = (userId: number) => {
   const [projects, setProjects] = useState<IProject[]>([]);
 
   useEffect(() => {
+    if (!userId) return;
     setLoading(true);
     try {
       (async () => {
@@ -21,14 +22,5 @@ export const useProjects = (userId: number) => {
     }
   }, [userId]);
 
-  return { loading, error, projects: projects };
+  return { loading, error, projects, addProject };
 };
-
-async function getUserProjects(userId: Number): Promise<Array<any>> {
-  try {
-    const { data } = await axios.get(`/api/user/${userId}/projects`);
-    return data;
-  } catch (error) {
-    throw error;
-  }
-}
