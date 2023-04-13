@@ -47,7 +47,7 @@ export default function CorrectionPage() {
       }
     }
     fetchAccounts();
-  }, []);
+  }, [selectedProject]);
 
   async function handleSubmit(event: any) {
     event.preventDefault();

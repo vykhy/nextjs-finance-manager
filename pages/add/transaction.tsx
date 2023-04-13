@@ -53,7 +53,7 @@ function AddTransaction() {
       }
     };
     getEntities();
-  }, []);
+  }, [selectedProject]);
 
   const handleSubmit = async () => {
     setError("");
@@ -149,7 +149,7 @@ function AddTransaction() {
                 fullWidth
                 onChange={(e: any) => setCategoryId(e.target.value)}
               >
-                {categories.map((category: ICategory, i) => (
+                {categories?.map((category: ICategory, i) => (
                   <MenuItem key={category.id} value={category.id}>
                     {category.name}
                   </MenuItem>
@@ -166,7 +166,7 @@ function AddTransaction() {
                 fullWidth
                 onChange={(e: any) => setAccountId(e.target.value)}
               >
-                {accounts.map((account: IAccount, i) => (
+                {accounts?.map((account: IAccount, i) => (
                   <MenuItem key={account.id} value={account.id}>
                     {account.name}
                   </MenuItem>
@@ -183,7 +183,7 @@ function AddTransaction() {
                 fullWidth
                 onChange={(e: any) => setTransactionTypeId(e.target.value)}
               >
-                {transactionTypes.map((type: ITransactionType, i) => (
+                {transactionTypes?.map((type: ITransactionType, i) => (
                   <MenuItem key={type.id} value={type.id}>
                     {type.name}
                   </MenuItem>
@@ -200,7 +200,7 @@ function AddTransaction() {
                 fullWidth
                 onChange={(e: any) => setPaymentMethodId(e.target.value)}
               >
-                {paymentMethods.map((method: IPaymentMethod, i) => (
+                {paymentMethods?.map((method: IPaymentMethod, i) => (
                   <MenuItem key={method.id} value={method.id}>
                     {method.name}
                   </MenuItem>

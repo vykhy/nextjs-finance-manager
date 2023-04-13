@@ -1,4 +1,5 @@
 import IUser from "@/interfaces/IUser";
+import { useRouter } from "next/router";
 import React, {
   createContext,
   ReactNode,
@@ -14,6 +15,7 @@ type AuthContextProps = {
 const AuthContext: any = createContext({});
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
+  const router = useRouter();
   const [user, setUser] = useState<IUser | null>(null);
   const [initialLoadingComplete, setInitialLoadingComplete] = useState(false);
 
@@ -32,6 +34,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    router.push("/");
     sessionStorage.removeItem("user");
   };
 

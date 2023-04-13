@@ -26,7 +26,7 @@ const ProjectContextProvider: React.FC<ProjectContextProps> = ({
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!user.id) return;
+    if (!user?.id) return;
     setLoading(true);
     try {
       (async () => {
@@ -38,7 +38,7 @@ const ProjectContextProvider: React.FC<ProjectContextProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [user.id]);
+  }, [user, user?.id]);
 
   useEffect(() => {
     if (!selectedProject) setSelectedProject(projects[0]?.id);
