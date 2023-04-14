@@ -17,7 +17,6 @@ function CreatePaymentMethod() {
   const { user } = useAuthContext();
 
   const handleSubmit = async () => {
-    const { user } = useAuthContext();
     if (name.length < 3) {
       setError("Name should be more than 2 characters");
       return;

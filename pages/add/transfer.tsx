@@ -18,7 +18,7 @@ import Select from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
-function transfer() {
+function Transfer() {
   const [fromAccountId, setFromAccountId] = useState<any>("");
   const [toAccountId, setToAccountId] = useState<any>("");
   const [item, setItem] = useState("");
@@ -188,4 +188,4 @@ function transfer() {
   );
 }
 
-export default transfer;
+export default Transfer;

@@ -34,7 +34,7 @@ const HomePage = () => {
           "Loading accounts..."
         ) : accounts.length ? (
           accounts.map((account: IAccount) => (
-            <ListItem disablePadding>
+            <ListItem key={account.id} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   <InboxIcon />
