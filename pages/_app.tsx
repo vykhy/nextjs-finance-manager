@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import ProjectContextProvider from "@/context/ProjectContext";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -11,6 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AuthContextProvider>
         <ProjectContextProvider>
           <Component {...pageProps} />
+          <Analytics />
         </ProjectContextProvider>
       </AuthContextProvider>
     </LocalizationProvider>
