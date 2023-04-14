@@ -21,7 +21,6 @@ import dayjs from "dayjs";
 function Transfer() {
   const [fromAccountId, setFromAccountId] = useState<any>("");
   const [toAccountId, setToAccountId] = useState<any>("");
-  const [item, setItem] = useState("");
   const [amount, setAmount] = useState("");
   const { projects, selectedProject } = useProjectContext();
   const [description, setDescription] = useState("");
@@ -57,7 +56,6 @@ function Transfer() {
       const { data } = await axios.post(
         `/api/project/${selectedProject}/transfer/create`,
         {
-          item,
           amount,
           fromAccountId,
           toAccountId,
@@ -93,14 +91,6 @@ function Transfer() {
             }
           </Typography>
           <Box sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              value={item}
-              onChange={(e) => setItem(e.target.value)}
-              label="Item"
-            />
             <TextField
               margin="normal"
               required

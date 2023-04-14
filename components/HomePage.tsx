@@ -10,6 +10,8 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import { Divider, List, Typography } from "@mui/material";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
+import Money from "@mui/icons-material/Money";
+import useTransactions from "@/hooks/useTransactions";
 
 const HomePage = () => {
   const { user } = useAuthContext();
@@ -19,6 +21,7 @@ const HomePage = () => {
     loading: loadingAccounts,
     error,
   } = useAccounts(selectedProject);
+  const { transactions } = useTransactions(selectedProject);
 
   if (error) {
     return <div>Error loading accounts.</div>;
@@ -75,6 +78,32 @@ const HomePage = () => {
           </ListItemButton>
         </Link>
       ))}
+      <h3>Transactions</h3>
+      <List>
+        {transactions?.map((transaction: any) => (
+          <ListItem key={transaction.id} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <Money />
+              </ListItemIcon>
+              <ListItemText
+                primary={`${transaction.item}`}
+                secondary={
+                  <Typography
+                    variant="body2"
+                    component="span"
+                    style={{ color: transaction.amount < 0 ? "red" : "green" }}
+                  >
+                    {transaction.amount < 0 ? "-" : ""}&#x20B9;{" "}
+                    {Math.abs(transaction.amount)} ({transaction.account})
+                  </Typography>
+                }
+                style={{ color: "black" }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </div>
   );
 };
