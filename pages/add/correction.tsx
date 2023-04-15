@@ -57,7 +57,6 @@ export default function CorrectionPage() {
         `/api/project/${selectedProject}/correction`,
         formData
       );
-      console.log(response.data);
     } catch (error) {
       console.error(error);
       setErrorMessage("Failed to submit correction");
@@ -97,7 +96,7 @@ export default function CorrectionPage() {
             margin="normal"
             required
             fullWidth
-            label="Amount"
+            label="New End Balance"
             type="number"
             id="endBalance"
             name="endBalance"

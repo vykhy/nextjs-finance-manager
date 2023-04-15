@@ -26,7 +26,7 @@ export default async function handler(
 
       // Update transaction table with correction entry
       const [transactionResult]: any = await db.query(
-        `INSERT INTO transaction ( account_id, item, balance, amount, description, date)
+        `INSERT INTO transaction ( account_id, item, amount, balance, description, date)
       VALUES ( ?, 'CORRECTION', (SELECT (? - balance) FROM account WHERE id = ? ), ?,
         'Balance correction', ?);`,
         [
