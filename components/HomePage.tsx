@@ -10,6 +10,7 @@ import Link from "next/link";
 import Money from "@mui/icons-material/Money";
 import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
+import TransactionButtons from "./AddTransactionsSection";
 
 const HomePage = () => {
   const { user } = useAuthContext();
@@ -22,6 +23,7 @@ const HomePage = () => {
       <Divider />
       <Accounts selectedProject={selectedProject} />
       <Divider />
+      <TransactionButtons />
       {navItems.map((item, idx) => (
         <Link href={`/add/${item.link}`} key={idx}>
           <ListItemButton>
@@ -67,14 +69,6 @@ const navItems = [
   {
     link: "category",
     text: "Add Category",
-  },
-  {
-    link: "transaction",
-    text: "Add Transaction",
-  },
-  {
-    link: "transfer",
-    text: "Transfer",
   },
   {
     link: "project",

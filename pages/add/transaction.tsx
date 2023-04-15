@@ -20,6 +20,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import { useRouter } from "next/router";
 
 function AddTransaction() {
   const { projects, selectedProject } = useProjectContext();
@@ -27,10 +28,11 @@ function AddTransaction() {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [transactionTypeId, setTransactionTypeId] = useState("");
   const [accountId, setAccountId] = useState("");
   const [paymentMethodId, setPaymentMethodId] = useState(0);
   const [date, setDate] = useState<Dayjs | null>(dayjs(Date.now()));
+  const router = useRouter();
+  const { type } = router.query;
 
   const [categories, setCategories] = useState([]);
   const [transactionTypes, setTransactionTypes] = useState([]);
@@ -58,11 +60,10 @@ function AddTransaction() {
   const handleSubmit = async () => {
     setError("");
     try {
-      const type: any = transactionTypes.find(
-        (type: ITransactionType) =>
-          Number(type.id) === Number(transactionTypeId)
+      const transactionType: any = transactionTypes.find(
+        (t: ITransactionType) => t.name.toLowerCase() === type
       );
-      const total = type.is_negative ? Number(amount) * -1 : amount;
+      const total = transactionType.is_negative ? Number(amount) * -1 : amount;
       const { data } = await axios.post(
         `/api/project/${selectedProject}/transaction`,
         {
@@ -71,12 +72,12 @@ function AddTransaction() {
           categoryId,
           description,
           paymentMethodId,
-          transactionTypeId,
+          transactionTypeId: transactionType.id,
           accountId,
           date,
         }
       );
-      console.log(data.data);
+      // console.log(data.data);
     } catch (error: any) {
       setError(error?.response?.data?.message || error.message);
     }
@@ -172,23 +173,6 @@ function AddTransaction() {
                   </MenuItem>
                 ))}
               </Select>{" "}
-              <InputLabel id="demo-simple-select-label">
-                Select Transaction Type
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={transactionTypeId}
-                label="Transaction Type"
-                fullWidth
-                onChange={(e: any) => setTransactionTypeId(e.target.value)}
-              >
-                {transactionTypes?.map((type: ITransactionType, i) => (
-                  <MenuItem key={type.id} value={type.id}>
-                    {type.name}
-                  </MenuItem>
-                ))}
-              </Select>
               <InputLabel id="demo-simple-select-label">
                 Payment method
               </InputLabel>

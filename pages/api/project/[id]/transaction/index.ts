@@ -67,18 +67,21 @@ export default async function handler(
       return res.status(500).json({ error: error.message });
     }
   } else if (req.method === "GET") {
+    const { id: projectId } = req.query;
     try {
       const [transactions]: Array<any> = await db.query(
-        `SELECT A.id, A.amount, A.item, A.amount, A.description, B.name as category, C.name as transactiontype, D.name as account, D.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
-      FROM transaction A
-      INNER JOIN category B on B.id=A.category_id
-      INNER JOIN transaction_type C on C.id=A.transaction_type_id
-      INNER JOIN account D on D.id=A.account_id
-      INNER JOIN payment_method E on E.id=A.payment_method_id
-      INNER JOIN project F ON F.id=D.project_id
-      INNER JOIN user G ON G.id = F.user_id
-      ORDER BY A.date DESC LIMIT 50;
-      `
+        `SELECT B.id, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
+        FROM account A
+        INNER JOIN transaction B ON B.account_id=A.id
+        LEFT JOIN category C ON C.id = B.category_id
+        LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
+        LEFT JOIN payment_method E ON E.id = B.payment_method_id
+        INNER JOIN project F ON F.id = A.project_id
+        INNER JOIN user G on G.id = F.user_id
+        WHERE A.project_id = ?
+        ORDER BY B.date DESC LIMIT 50;
+      `,
+        [projectId]
       );
       res.json({ data: transactions });
     } catch (error: any) {
