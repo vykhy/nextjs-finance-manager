@@ -1,73 +1,26 @@
 import { useProjectContext } from "@/context/ProjectContext";
-import useAccounts from "@/hooks/useAccounts";
-import IAccount from "@/interfaces/IAccount";
 import React from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/Inbox";
-import { Divider, List, Typography } from "@mui/material";
+import { Box, Divider, List, Typography } from "@mui/material";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import Money from "@mui/icons-material/Money";
 import useTransactions from "@/hooks/useTransactions";
+import Accounts from "./Accounts";
 
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
-  const {
-    accounts,
-    loading: loadingAccounts,
-    error,
-  } = useAccounts(selectedProject);
   const { transactions } = useTransactions(selectedProject);
 
-  if (error) {
-    return <div>Error loading accounts.</div>;
-  }
-
   return (
-    <div style={{ backgroundColor: "white", color: "black" }}>
+    <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
       <h1> Hello {user.name}</h1>
       <Divider />
-      <h3>Accounts</h3>
-      <List>
-        {loadingAccounts ? (
-          "Loading accounts..."
-        ) : accounts.length ? (
-          accounts.map((account: IAccount) => (
-            <ListItem key={account.id} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InboxIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={`${account.name}`}
-                  secondary={
-                    <Typography variant="body2" component="span">
-                      &#x20B9; {account.balance}
-                    </Typography>
-                  }
-                  style={{ color: "black" }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))
-        ) : (
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={`There are no accounts in this project`}
-                style={{ color: "black" }}
-              />
-            </ListItemButton>
-          </ListItem>
-        )}
-      </List>
+      <Accounts selectedProject={selectedProject} />
       <Divider />
       {navItems.map((item, idx) => (
         <Link href={`/add/${item.link}`} key={idx}>
@@ -104,17 +57,13 @@ const HomePage = () => {
           </ListItem>
         ))}
       </List>
-    </div>
+    </Box>
   );
 };
 
 export default HomePage;
 
 const navItems = [
-  {
-    link: "account",
-    text: "Add Account",
-  },
   {
     link: "category",
     text: "Add Category",
