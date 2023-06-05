@@ -19,7 +19,7 @@ const HomePage = () => {
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
-      <h1> Hello {user.name}</h1>
+      <h1> Hello Billionaire {user.name}!</h1>
       <Divider />
       <Accounts selectedProject={selectedProject} />
       <Divider />
