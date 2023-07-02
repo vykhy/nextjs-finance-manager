@@ -70,7 +70,7 @@ export default async function handler(
     const { id: projectId } = req.query;
     try {
       const [transactions]: Array<any> = await db.query(
-        `SELECT B.id, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
+        `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
         FROM account A
         INNER JOIN transaction B ON B.account_id=A.id
         LEFT JOIN category C ON C.id = B.category_id

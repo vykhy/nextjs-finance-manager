@@ -50,7 +50,7 @@ function Accounts({ selectedProject }: { selectedProject: number }) {
         justifyContent="space-between"
         py={1}
       >
-        <Typography variant="h5">
+        <Typography variant="h6">
           Accounts: &#x20B9; {showTotal ? `${totalBalance}` : `------------`}
           <IconButton onClick={toggleShowTotal}>
             {showTotal ? <VisibilityIcon /> : <VisibilityOffIcon />}
