@@ -35,8 +35,16 @@ function Transaction({ transaction }: any) {
               }}
             >
               <Typography variant="body1">{transaction.item}</Typography>
-              <Typography variant="caption" color={"gray"}>
-                {format(new Date(transaction.date), "dd-MM-yyyy HH:mm a")}
+              <Typography
+                variant="body2"
+                component="span"
+                style={{
+                  color: transaction.amount < 0 ? "red" : "green",
+                  fontWeight: 700,
+                  fontSize: 20,
+                }}
+              >
+                &#x20B9; {Math.abs(transaction.amount)}
               </Typography>
             </Box>
           }
@@ -49,14 +57,11 @@ function Transaction({ transaction }: any) {
                   flexWrap: "wrap",
                 }}
               >
-                <Typography
-                  variant="body2"
-                  component="span"
-                  style={{ color: transaction.amount < 0 ? "red" : "green" }}
-                >
-                  {transaction.amount < 0 ? "-" : ""}&#x20B9;{" "}
-                  {Math.abs(transaction.amount)} ({transaction.account})
+                <Typography variant="caption" color={"gray"}>
+                  {format(new Date(transaction.date), "dd-MM-yyyy HH:mm a")} (
+                  {transaction.account})
                 </Typography>
+
                 <IconButton onClick={toggleShowDescription}>
                   {showDescription ? (
                     <ArrowDropUp
@@ -79,7 +84,7 @@ function Transaction({ transaction }: any) {
               {showDescription && (
                 <Typography variant="body2">
                   {transaction.category}
-                  {transaction.description && `- ${transaction.description}`}
+                  {transaction.description && ` - ${transaction.description}`}
                 </Typography>
               )}
             </>
