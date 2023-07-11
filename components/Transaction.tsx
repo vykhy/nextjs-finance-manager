@@ -41,7 +41,7 @@ function Transaction({ transaction }: any) {
                 style={{
                   color: transaction.amount < 0 ? "red" : "green",
                   fontWeight: 700,
-                  fontSize: 20,
+                  fontSize: 18,
                 }}
               >
                 &#x20B9; {Math.abs(transaction.amount)}
