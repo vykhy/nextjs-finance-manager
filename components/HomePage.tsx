@@ -10,11 +10,14 @@ import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
+import TransactionService from "./../services/TransactionService";
 
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
   const { transactions } = useTransactions(selectedProject);
+  const transactionService = new TransactionService(transactions);
+  const categories = transactionService.getCategoryData();
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
@@ -34,6 +37,22 @@ const HomePage = () => {
             </ListItem>
           </ListItemButton>
         </Link>
+      ))}
+      <Divider />
+      <Typography variant="h6">Category</Typography>
+      {categories?.map((category) => (
+        <Box>
+          <Typography variant="body1">
+            {category.category} - {category.count}
+          </Typography>
+          <Typography variant="body2">
+            Rs.{" "}
+            {category.amount.toLocaleString({
+              type: "currency",
+              currency: "inr",
+            })}
+          </Typography>
+        </Box>
       ))}
       <Typography variant="h6">Transactions</Typography>
       <List
