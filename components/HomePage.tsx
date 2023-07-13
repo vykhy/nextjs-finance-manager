@@ -41,7 +41,7 @@ const HomePage = () => {
       <Divider />
       <Typography variant="h6">Category</Typography>
       {categories?.map((category) => (
-        <Box>
+        <Box key={category.category}>
           <Typography variant="body1">
             {category.category} - {category.count}
           </Typography>
