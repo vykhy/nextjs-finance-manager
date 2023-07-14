@@ -8,6 +8,7 @@ const useTransactions = (projectId: number) => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      if (!projectId) return;
       setIsLoading(true);
       try {
         const response = await axios.get(

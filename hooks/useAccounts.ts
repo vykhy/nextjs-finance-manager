@@ -9,6 +9,7 @@ const useAccounts = (projectId: number) => {
 
   useEffect(() => {
     const fetchAccounts = async () => {
+      if (!projectId) return;
       setLoading(true);
       try {
         const res = await axios.get(`/api/project/${projectId}/account/get`);

@@ -22,9 +22,17 @@ class TransactionService {
         };
       }
     }
-    return Object.values(categoriesMap).sort(
+    const incomes = [];
+    const expenses = [];
+
+    const all = Object.values(categoriesMap).sort(
       (a, b) => Math.abs(b.amount) - Math.abs(a.amount)
     );
+    for (const item of all) {
+      if (item.amount > 0) incomes.push(item);
+      else expenses.push(item);
+    }
+    return [incomes, expenses];
   }
 }
 

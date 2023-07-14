@@ -11,13 +11,15 @@ import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
 import TransactionService from "./../services/TransactionService";
+import Chart from "react-google-charts";
+import { title } from "process";
 
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
   const { transactions } = useTransactions(selectedProject);
   const transactionService = new TransactionService(transactions);
-  const categories = transactionService.getCategoryData();
+  const [incomes, expenses] = transactionService.getCategoryData();
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
@@ -40,20 +42,46 @@ const HomePage = () => {
       ))}
       <Divider />
       <Typography variant="h6">Category</Typography>
-      {categories?.map((category) => (
-        <Box key={category.category}>
-          <Typography variant="body1">
-            {category.category} - {category.count}
-          </Typography>
-          <Typography variant="body2">
-            Rs.{" "}
-            {category.amount.toLocaleString({
-              type: "currency",
-              currency: "inr",
-            })}
-          </Typography>
-        </Box>
-      ))}
+      <Box style={{ display: "flex", flexWrap: "wrap" }}>
+        <Chart
+          chartType="PieChart"
+          data={
+            incomes
+              ? [
+                  ["Category", "Amount"],
+                  ...incomes.map((item) => [
+                    item.category,
+                    Math.abs(item.amount),
+                  ]),
+                ]
+              : ["Category", "Amount"]
+          }
+          options={{
+            title: "Income Categories",
+          }}
+          width={"400px"}
+          height={"400px"}
+        />
+        <Chart
+          chartType="PieChart"
+          data={
+            expenses
+              ? [
+                  ["Category", "Amount"],
+                  ...expenses.map((item) => [
+                    item.category,
+                    Math.abs(item.amount),
+                  ]),
+                ]
+              : ["Category", "Amount"]
+          }
+          options={{
+            title: "Expense Categories",
+          }}
+          width={"400px"}
+          height={"400px"}
+        />
+      </Box>
       <Typography variant="h6">Transactions</Typography>
       <List
         style={{
