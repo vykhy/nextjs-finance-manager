@@ -13,11 +13,14 @@ export default async function handler(
   try {
     // Check sender's account balance
     const [senderAccount]: any = await db.query(
-      "SELECT balance FROM account WHERE id = ?",
+      "SELECT balance, name FROM account WHERE id = ?",
       [fromAccountId]
     );
     console.log(senderAccount[0], amount, senderAccount[0].balance < amount);
-    if (Number(senderAccount[0].balance) < amount) {
+    if (
+      Number(senderAccount[0].balance) < amount &&
+      !senderAccount[0].name.toLowerCase().includes("loan")
+    ) {
       return res.status(400).json({ message: "Insufficient balance" });
     }
     await db.beginTransaction();

@@ -12,7 +12,6 @@ import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
 import TransactionService from "./../services/TransactionService";
 import Chart from "react-google-charts";
-import { title } from "process";
 
 const HomePage = () => {
   const { user } = useAuthContext();
