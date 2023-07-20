@@ -79,7 +79,7 @@ export default async function handler(
         INNER JOIN project F ON F.id = A.project_id
         INNER JOIN user G on G.id = F.user_id
         WHERE A.project_id = ?
-        ORDER BY B.date DESC LIMIT 50;
+        ORDER BY B.date DESC LIMIT 100;
       `,
         [projectId]
       );

@@ -40,7 +40,7 @@ const HomePage = () => {
         </Link>
       ))}
       <Divider />
-      <Typography variant="h6">Category</Typography>
+      <Typography variant="h6">Categories</Typography>
       <Box style={{ display: "flex", flexWrap: "wrap" }}>
         <Chart
           chartType="PieChart"
