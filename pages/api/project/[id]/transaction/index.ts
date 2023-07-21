@@ -83,7 +83,7 @@ export default async function handler(
       `,
         [projectId]
       );
-      res.json({ data: transactions });
+      return res.json({ data: transactions });
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }
