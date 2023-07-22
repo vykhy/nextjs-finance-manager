@@ -81,7 +81,10 @@ const HomePage = () => {
           height={"400px"}
         />
       </Box>
-      <Typography variant="h6">Transactions</Typography>
+      <Link href={`/transactions`}>
+        <Typography variant="h6">Transactions</Typography>
+      </Link>
+
       <List
         style={{
           border: "1px solid gray",

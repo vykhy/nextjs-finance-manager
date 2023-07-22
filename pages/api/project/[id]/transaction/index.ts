@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
 import format from "date-fns/format";
+import { endOfDay, startOfDay } from "date-fns";
 
 export default async function handler(
   req: NextApiRequest,
@@ -68,9 +69,11 @@ export default async function handler(
     }
   } else if (req.method === "GET") {
     const { id: projectId } = req.query;
+    const { startDate, endDate } = req.query;
     try {
-      const [transactions]: Array<any> = await db.query(
-        `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
+      if (startDate != "undefined") {
+        const [transactions]: Array<any> = await db.query(
+          `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
         FROM account A
         INNER JOIN transaction B ON B.account_id=A.id
         LEFT JOIN category C ON C.id = B.category_id
@@ -79,11 +82,33 @@ export default async function handler(
         INNER JOIN project F ON F.id = A.project_id
         INNER JOIN user G on G.id = F.user_id
         WHERE A.project_id = ?
-        ORDER BY B.date DESC LIMIT 100;
+        AND DATE(B.date) BETWEEN ? AND ?;
+        ;
       `,
-        [projectId]
-      );
-      return res.json({ data: transactions });
+          [
+            projectId,
+            format(new Date(startDate), "yyyy-MM-dd"),
+            format(new Date(endDate), "yyyy-MM-dd"),
+          ]
+        );
+        return res.json({ data: transactions });
+      } else {
+        const [transactions]: Array<any> = await db.query(
+          `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
+        FROM account A
+        INNER JOIN transaction B ON B.account_id=A.id
+        LEFT JOIN category C ON C.id = B.category_id
+        LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
+        LEFT JOIN payment_method E ON E.id = B.payment_method_id
+        INNER JOIN project F ON F.id = A.project_id
+        INNER JOIN user G on G.id = F.user_id
+        WHERE A.project_id = ?
+        ORDER BY B.date DESC LIMIT 30;
+      `,
+          [projectId]
+        );
+        return res.json({ data: transactions });
+      }
     } catch (error: any) {
       return res.status(500).json({ error: error.message });
     }

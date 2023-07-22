@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Dayjs } from "dayjs";
 
-const useTransactions = (projectId: number) => {
+const useTransactions = (
+  projectId: number,
+  startDate: Dayjs | null | undefined = undefined,
+  endDate: Dayjs | null | undefined = undefined
+) => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | undefined>(undefined);
@@ -12,7 +17,7 @@ const useTransactions = (projectId: number) => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `/api/project/${projectId}/transaction`
+          `/api/project/${projectId}/transaction?startDate=${startDate}&endDate=${endDate}`
         );
         setTransactions(response.data.data);
       } catch (err: any) {
@@ -22,7 +27,7 @@ const useTransactions = (projectId: number) => {
       }
     };
     fetchTransactions();
-  }, [projectId]);
+  }, [projectId, startDate, endDate]);
 
   return { transactions, isLoading, error };
 };
