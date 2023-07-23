@@ -69,7 +69,8 @@ export default async function handler(
     }
   } else if (req.method === "GET") {
     const { id: projectId } = req.query;
-    const { startDate, endDate } = req.query;
+    const startDate = req.query.startDate as string | number;
+    const endDate = req.query.endDate as string | number;
     try {
       if (startDate != "undefined") {
         const [transactions]: Array<any> = await db.query(

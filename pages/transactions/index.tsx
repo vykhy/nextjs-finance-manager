@@ -21,7 +21,7 @@ function Transactions() {
   const { transactions } = useTransactions(selectedProject, startDate, endDate);
   const transactionService = new TransactionService(transactions);
   const [incomes, expenses] = transactionService.getCategoryData();
-  const totalExpense = useMemo(() => {
+  const totalExpense: number = useMemo(() => {
     return transactions?.reduce(
       (total: number, transaction: any) =>
         (total +=
@@ -35,7 +35,7 @@ function Transactions() {
       Number(0)
     );
   }, [transactions]);
-  const totalIncome = useMemo(() => {
+  const totalIncome: number = useMemo(() => {
     return transactions?.reduce(
       (total: number, transaction: any) =>
         (total +=
@@ -97,8 +97,8 @@ function Transactions() {
             <CardContent>
               <Typography>Expenses</Typography>
               <Typography>
-                {totalExpense.toLocaleString({
-                  type: "currency",
+                {totalExpense.toLocaleString("en-IN", {
+                  style: "currency",
                   currency: "inr",
                 })}
               </Typography>
@@ -108,8 +108,8 @@ function Transactions() {
             <CardContent>
               <Typography>Income</Typography>
               <Typography>
-                {totalIncome.toLocaleString({
-                  type: "currency",
+                {totalIncome.toLocaleString("en-IN", {
+                  style: "currency",
                   currency: "inr",
                 })}
               </Typography>
