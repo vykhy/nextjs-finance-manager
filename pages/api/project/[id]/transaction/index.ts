@@ -83,7 +83,8 @@ export default async function handler(
         INNER JOIN project F ON F.id = A.project_id
         INNER JOIN user G on G.id = F.user_id
         WHERE A.project_id = ?
-        AND DATE(B.date) BETWEEN ? AND ?;
+        AND DATE(B.date) BETWEEN ? AND ?
+        ORDER BY B.date;
         ;
       `,
           [

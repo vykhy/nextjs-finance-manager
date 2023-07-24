@@ -10,15 +10,11 @@ import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
-import TransactionService from "./../services/TransactionService";
-import Chart from "react-google-charts";
 
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
   const { transactions } = useTransactions(selectedProject);
-  const transactionService = new TransactionService(transactions);
-  const [incomes, expenses] = transactionService.getCategoryData();
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
@@ -41,46 +37,6 @@ const HomePage = () => {
       ))}
       <Divider />
       <Typography variant="h6">Categories</Typography>
-      <Box style={{ display: "flex", flexWrap: "wrap" }}>
-        <Chart
-          chartType="PieChart"
-          data={
-            incomes
-              ? [
-                  ["Category", "Amount"],
-                  ...incomes.map((item) => [
-                    item.category,
-                    Math.abs(item.amount),
-                  ]),
-                ]
-              : ["Category", "Amount"]
-          }
-          options={{
-            title: "Income Categories",
-          }}
-          width={"400px"}
-          height={"400px"}
-        />
-        <Chart
-          chartType="PieChart"
-          data={
-            expenses
-              ? [
-                  ["Category", "Amount"],
-                  ...expenses.map((item) => [
-                    item.category,
-                    Math.abs(item.amount),
-                  ]),
-                ]
-              : ["Category", "Amount"]
-          }
-          options={{
-            title: "Expense Categories",
-          }}
-          width={"400px"}
-          height={"400px"}
-        />
-      </Box>
       <Link href={`/transactions`}>
         <Typography variant="h6">Transactions</Typography>
       </Link>
