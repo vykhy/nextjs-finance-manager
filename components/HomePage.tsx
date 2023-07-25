@@ -36,7 +36,6 @@ const HomePage = () => {
         </Link>
       ))}
       <Divider />
-      <Typography variant="h6">Categories</Typography>
       <Link href={`/transactions`}>
         <Typography variant="h6">Transactions</Typography>
       </Link>
