@@ -57,7 +57,7 @@ function Transactions() {
           minHeight: "100vh",
         }}
       >
-        <Typography color={"black"} variant="h4">
+        <Typography sx={{ p: 1 }} color={"black"} variant="h4">
           Transactions
         </Typography>
         <Box
@@ -67,16 +67,25 @@ function Transactions() {
             flexWrap: "wrap",
             justifyContent: "space-evenly",
             aligntItems: "center",
+            mb: 2,
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              width: "45%",
+            }}
+          >
             <Typography>Date: </Typography>
             <DatePicker
               value={startDate}
               onChange={(newValue) => setStartDate(newValue)}
             />
           </Box>
-          <Box>
+          <Box
+            sx={{
+              width: "45%",
+            }}
+          >
             <Typography>Date: </Typography>
             <DatePicker
               value={endDate}
@@ -93,10 +102,9 @@ function Transactions() {
             aligntItems: "center",
           }}
         >
-          <Card>
+          <Card sx={{ backgroundColor: "red" }}>
             <CardContent>
-              <Typography>Expenses</Typography>
-              <Typography>
+              <Typography sx={{ color: "white", fontWeight: "bold" }}>
                 {totalExpense.toLocaleString("en-IN", {
                   style: "currency",
                   currency: "inr",
@@ -104,10 +112,9 @@ function Transactions() {
               </Typography>
             </CardContent>
           </Card>
-          <Card>
+          <Card sx={{ backgroundColor: "green" }}>
             <CardContent>
-              <Typography>Income</Typography>
-              <Typography>
+              <Typography sx={{ color: "white", fontWeight: "bold" }}>
                 {totalIncome.toLocaleString("en-IN", {
                   style: "currency",
                   currency: "inr",
@@ -134,7 +141,7 @@ function Transactions() {
               title: "Income Categories",
             }}
             width={"400px"}
-            height={"400px"}
+            height={"350px"}
           />
           <Chart
             chartType="PieChart"
@@ -153,7 +160,7 @@ function Transactions() {
               title: "Expense Categories",
             }}
             width={"400px"}
-            height={"400px"}
+            height={"350px"}
           />
         </Box>
         <List

@@ -3,13 +3,14 @@ import React from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import { Box, Divider, List, Typography } from "@mui/material";
+import { Box, Divider, IconButton, List, Typography } from "@mui/material";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
+import { ArrowRight, ArrowRightAlt } from "@mui/icons-material";
 
 const HomePage = () => {
   const { user } = useAuthContext();
@@ -36,8 +37,20 @@ const HomePage = () => {
         </Link>
       ))}
       <Divider />
+
       <Link href={`/transactions`}>
-        <Typography variant="h6">Transactions</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h6">Transactions</Typography>
+          <IconButton>
+            <ArrowRightAlt />
+          </IconButton>
+        </Box>
       </Link>
 
       <List
