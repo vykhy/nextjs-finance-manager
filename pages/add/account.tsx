@@ -11,14 +11,17 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useProjectContext } from "@/context/ProjectContext";
 import IProject from "@/interfaces/IProject";
+import { CircularProgress } from "@mui/material";
 
 function CreateAccount() {
   const [name, setName] = useState("");
   const [balance, setBalance] = useState("0");
   const { projects, selectedProject } = useProjectContext();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async () => {
+    if (isLoading) return;
     if (name.length < 4) {
       setError("Name should be more than 3 characters");
       return;
@@ -27,14 +30,20 @@ function CreateAccount() {
       setError("Project is required");
       return;
     }
-    const { data } = await axios.post(
-      `/api/project/${selectedProject}/account/create`,
-      {
-        name,
-        balance,
-      }
-    );
-    console.log(data);
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        `/api/project/${selectedProject}/account/create`,
+        {
+          name,
+          balance,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -93,7 +102,11 @@ function CreateAccount() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Add Account
+                {isLoading ? (
+                  <CircularProgress size={22} sx={{ color: "white" }} />
+                ) : (
+                  "Add Account"
+                )}
               </Button>
             </Box>
           </Box>

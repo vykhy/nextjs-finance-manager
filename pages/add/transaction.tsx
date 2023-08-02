@@ -21,6 +21,7 @@ import Select from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { useRouter } from "next/router";
+import { CircularProgress } from "@mui/material";
 
 function AddTransaction() {
   const { projects, selectedProject } = useProjectContext();
@@ -39,6 +40,7 @@ function AddTransaction() {
   const [accounts, setAccounts] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getEntities = async () => {
@@ -59,6 +61,8 @@ function AddTransaction() {
 
   const handleSubmit = async () => {
     setError("");
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const transactionType: any = transactionTypes.find(
         (t: ITransactionType) => t.name.toLowerCase() === type
@@ -77,9 +81,10 @@ function AddTransaction() {
           date,
         }
       );
-      // console.log(data.data);
     } catch (error: any) {
       setError(error?.response?.data?.message || error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -205,7 +210,11 @@ function AddTransaction() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Add Transaction
+                {isLoading ? (
+                  <CircularProgress size={22} sx={{ color: "white" }} />
+                ) : (
+                  "Add Transaction"
+                )}
               </Button>
             </Box>
           </Box>

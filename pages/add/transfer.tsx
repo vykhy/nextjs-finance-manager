@@ -17,6 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { CircularProgress } from "@mui/material";
 
 function Transfer() {
   const [fromAccountId, setFromAccountId] = useState<any>("");
@@ -28,6 +29,7 @@ function Transfer() {
 
   const [error, setError] = useState("");
   const [accounts, setAccounts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getAccounts = async () => {
@@ -52,6 +54,8 @@ function Transfer() {
       setError("Sender and receiver accounts are required");
       return;
     }
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const { data } = await axios.post(
         `/api/project/${selectedProject}/transfer/create`,
@@ -66,6 +70,8 @@ function Transfer() {
       console.log(data.data);
     } catch (error: any) {
       setError(error?.response?.data?.message || error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -169,7 +175,11 @@ function Transfer() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Transfer
+              {isLoading ? (
+                <CircularProgress size={22} sx={{ color: "white" }} />
+              ) : (
+                "Transfer"
+              )}
             </Button>
           </Box>
         </Box>
