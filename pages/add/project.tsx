@@ -1,5 +1,4 @@
 import Layout from "@/components/Layout";
-import axios from "axios";
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -11,14 +10,19 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useProjectContext } from "@/context/ProjectContext";
 import IProject from "@/interfaces/IProject";
+import { CircularProgress } from "@mui/material";
 
 const NewProjectPage = () => {
   const { projects, selectedProject, addProject } = useProjectContext();
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isLoading) return;
+
     try {
+      setIsLoading(true);
       const form = new FormData(event.currentTarget);
       const name = form.get("name");
       const description = form.get("description");
@@ -26,6 +30,8 @@ const NewProjectPage = () => {
     } catch (error: any) {
       setError(error.message);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,7 +74,11 @@ const NewProjectPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create Project
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Create Project"
+              )}
             </Button>
           </Box>
         </Box>

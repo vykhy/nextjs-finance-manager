@@ -17,9 +17,11 @@ const theme = createTheme();
 
 function CreateUser() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isLoading) return;
     const form = new FormData(event.currentTarget);
     const password = form.get("password");
     const confirmPassword = form.get("confirmPassword");
@@ -27,13 +29,20 @@ function CreateUser() {
       setError("Passwords do not match");
       return;
     }
-    const { data } = await axios.post("/api/user/create", {
-      name: form.get("name"),
-      email: form.get("email"),
-      password,
-      confirmPassword,
-    });
-    console.log(data);
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post("/api/user/create", {
+        name: form.get("name"),
+        email: form.get("email"),
+        password,
+        confirmPassword,
+      });
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <ThemeProvider theme={theme}>

@@ -17,18 +17,27 @@ import FormHelperText from "@mui/material/FormHelperText";
 function CreateTransactionType() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNegative, setIsNegative] = useState("false");
 
   const handleSubmit = async () => {
+    if (isLoading) return;
     if (name.length < 3) {
       setError("Name should be more than 3 characters");
       return;
     }
-    const { data } = await axios.post("/api/transactiontype/create", {
-      name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
-      isNegative: isNegative === "true",
-    });
-    console.log(data);
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post("/api/transactiontype/create", {
+        name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
+        isNegative: isNegative === "true",
+      });
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <Layout>

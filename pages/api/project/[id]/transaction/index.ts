@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
 import format from "date-fns/format";
-import { endOfDay, startOfDay } from "date-fns";
 
 export default async function handler(
   req: NextApiRequest,
@@ -84,7 +83,7 @@ export default async function handler(
         INNER JOIN user G on G.id = F.user_id
         WHERE A.project_id = ?
         AND DATE(B.date) BETWEEN ? AND ?
-        ORDER BY B.date;
+        ORDER BY B.date DESC;
         ;
       `,
           [

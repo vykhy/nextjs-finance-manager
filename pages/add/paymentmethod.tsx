@@ -14,21 +14,31 @@ import Container from "@mui/material/Container";
 function CreatePaymentMethod() {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useAuthContext();
 
   const handleSubmit = async () => {
+    if (isLoading) return;
+
     if (name.length < 3) {
       setError("Name should be more than 2 characters");
       return;
     }
-    const { data } = await axios.post(
-      `/api/user/${user.id}/paymentmethod/create`,
-      {
-        name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
-        userId: user.id,
-      }
-    );
-    console.log(data);
+    try {
+      setIsLoading(true);
+      const { data } = await axios.post(
+        `/api/user/${user.id}/paymentmethod/create`,
+        {
+          name: `${name.split("")[0].toUpperCase()}${name.substring(1)}`,
+          userId: user.id,
+        }
+      );
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <>

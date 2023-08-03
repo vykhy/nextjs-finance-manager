@@ -12,6 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useAuthContext } from "@/context/AuthContext";
 import axios from "axios";
+import { CircularProgress } from "@mui/material";
 
 export function Copyright(props: any) {
   return (
@@ -35,10 +36,12 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { login } = useAuthContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isLoading) return;
     const form = new FormData(event.currentTarget);
     const email = form.get("email");
     const password = form.get("password");
@@ -47,6 +50,7 @@ export default function SignIn() {
         setError("Please enter all values");
         return;
       }
+      setIsLoading(true);
       const { data } = await axios.post("/api/user/login", {
         email,
         password,
@@ -54,6 +58,8 @@ export default function SignIn() {
       login(data.data);
     } catch (error: any) {
       console.log(error?.response?.data?.message || error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -108,7 +114,11 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <Grid container>
               <Grid item>

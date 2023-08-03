@@ -27,6 +27,8 @@ interface CorrectionFormData {
 export default function CorrectionPage() {
   const { projects, selectedProject } = useProjectContext();
   const [accounts, setAccounts] = useState<IAccount[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [formData, setFormData] = useState<CorrectionFormData>({
     accountId: "",
     endBalance: 0,
@@ -51,8 +53,12 @@ export default function CorrectionPage() {
 
   async function handleSubmit(event: any) {
     event.preventDefault();
+    if (isLoading) return;
+
     setErrorMessage(null);
     try {
+      setIsLoading(true);
+
       const response = await axios.post(
         `/api/project/${selectedProject}/correction`,
         formData
@@ -60,6 +66,8 @@ export default function CorrectionPage() {
     } catch (error) {
       console.error(error);
       setErrorMessage("Failed to submit correction");
+    } finally {
+      setIsLoading(false);
     }
   }
 

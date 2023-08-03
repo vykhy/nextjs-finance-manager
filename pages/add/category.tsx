@@ -11,13 +11,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import IProject from "@/interfaces/IProject";
 import { useProjectContext } from "@/context/ProjectContext";
+import { CircularProgress } from "@mui/material";
 
 function CreateCategory() {
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { projects, selectedProject } = useProjectContext();
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
+    if (isLoading) return;
     if (name.length < 4) {
       setError("Name should be more than 3 characters");
       return;
@@ -26,13 +29,20 @@ function CreateCategory() {
       setError("Project is required");
       return;
     }
-    const { data } = await axios.post(
-      `/api/project/${selectedProject}/category/create`,
-      {
-        name,
-      }
-    );
-    console.log(data);
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        `/api/project/${selectedProject}/category/create`,
+        {
+          name,
+        }
+      );
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
   return (
     <>
@@ -74,7 +84,11 @@ function CreateCategory() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Add Category
+                {isLoading ? (
+                  <CircularProgress sx={{ color: "white" }} />
+                ) : (
+                  "Add Category"
+                )}
               </Button>
             </Box>
           </Box>
