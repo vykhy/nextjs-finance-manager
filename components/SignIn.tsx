@@ -115,7 +115,7 @@ export default function SignIn() {
               sx={{ mt: 3, mb: 2 }}
             >
               {isLoading ? (
-                <CircularProgress sx={{ color: "white" }} />
+                <CircularProgress size={22} sx={{ color: "white" }} />
               ) : (
                 "Sign In"
               )}

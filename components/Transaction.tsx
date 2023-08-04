@@ -3,16 +3,38 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Box, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  MenuItem,
+  MenuList,
+  Popover,
+  Typography,
+} from "@mui/material";
 import Money from "@mui/icons-material/Money";
 import { format } from "date-fns";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp, MoreVert } from "@mui/icons-material";
 
 function Transaction({ transaction }: any) {
   const [showDescription, setShowDescription] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const toggleShowDescription = () => {
     setShowDescription((prev) => !prev);
+  };
+  const handlePopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleDelete = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
+    setTimeout(() => {
+      setAnchorEl(null);
+      setIsDeleting(false);
+    }, 1500);
   };
   return (
     <ListItem
@@ -35,17 +57,22 @@ function Transaction({ transaction }: any) {
               }}
             >
               <Typography variant="body1">{transaction.item}</Typography>
-              <Typography
-                variant="body2"
-                component="span"
-                style={{
-                  color: transaction.amount < 0 ? "red" : "green",
-                  fontWeight: 700,
-                  fontSize: 18,
-                }}
-              >
-                &#x20B9; {Math.abs(transaction.amount)}
-              </Typography>
+              <Box>
+                <Typography
+                  variant="body2"
+                  component="span"
+                  style={{
+                    color: transaction.amount < 0 ? "red" : "green",
+                    fontWeight: 700,
+                    fontSize: 18,
+                  }}
+                >
+                  &#x20B9; {Math.abs(transaction.amount)}
+                </Typography>
+                <IconButton onClick={handlePopover}>
+                  <MoreVert />
+                </IconButton>
+              </Box>
             </Box>
           }
           secondary={
@@ -92,6 +119,36 @@ function Transaction({ transaction }: any) {
           style={{ color: "black" }}
         />
       </ListItemButton>
+      <Popover
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <MenuList>
+          <MenuItem>
+            <Button
+              onClick={handleDelete}
+              size="small"
+              variant="contained"
+              color="error"
+            >
+              {isDeleting ? (
+                <CircularProgress size={22} sx={{ color: "white " }} />
+              ) : (
+                "Delete"
+              )}
+            </Button>
+          </MenuItem>
+        </MenuList>
+      </Popover>
     </ListItem>
   );
 }

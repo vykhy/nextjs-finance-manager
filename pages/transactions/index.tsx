@@ -7,7 +7,7 @@ import { Box, Card, CardContent, List, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subDays } from "date-fns";
 import dayjs, { Dayjs } from "dayjs";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Chart from "react-google-charts";
 
 function Transactions() {
@@ -49,6 +49,7 @@ function Transactions() {
       Number(0)
     );
   }, [transactions]);
+
   return (
     <Layout>
       <Box

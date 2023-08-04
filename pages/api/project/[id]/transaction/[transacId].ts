@@ -13,13 +13,13 @@ export default async function handler(
         "SELECT * FROM transaction WHERE id = ?",
         [transactionId]
       );
-      await db.query("UPDATE account SET balance += ? WHERE id = ?", [
-        result[0].balance,
+      await db.query("UPDATE account SET balance -= ? WHERE id = ?", [
+        result[0].amount,
         result[0].account_id,
       ]);
       await db.query(
-        "UPDATE transaction SET balance += ? WHERE account_id = ?",
-        [result[0].balance, result[0].account_id]
+        "UPDATE transaction SET balance -= ? WHERE account_id = ?",
+        [result[0].amount, result[0].account_id]
       );
       return res.status(200).send("Success");
     } catch (error) {
