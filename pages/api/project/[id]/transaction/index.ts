@@ -73,17 +73,22 @@ export default async function handler(
     try {
       if (startDate != "undefined") {
         const [transactions]: Array<any> = await db.query(
-          `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
-        FROM account A
-        INNER JOIN transaction B ON B.account_id=A.id
-        LEFT JOIN category C ON C.id = B.category_id
-        LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
-        LEFT JOIN payment_method E ON E.id = B.payment_method_id
-        INNER JOIN project F ON F.id = A.project_id
-        INNER JOIN user G on G.id = F.user_id
-        WHERE A.project_id = ?
-        AND DATE(B.date) BETWEEN ? AND ?
-        ORDER BY B.date DESC;
+          `SELECT 
+            B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category,
+              D.name as transactiontype, A.name as account, B.balance as accountbalance, 
+              E.name as paymentmethod, F.name as project, G.name as user
+        FROM 
+          account A
+          INNER JOIN transaction B ON B.account_id=A.id
+          LEFT JOIN category C ON C.id = B.category_id
+          LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
+          LEFT JOIN payment_method E ON E.id = B.payment_method_id
+          INNER JOIN project F ON F.id = A.project_id
+          INNER JOIN user G on G.id = F.user_id
+        WHERE 
+          A.project_id = ?
+          AND DATE(B.date) BETWEEN ? AND ?
+          ORDER BY B.id DESC;
         ;
       `,
           [
@@ -95,16 +100,21 @@ export default async function handler(
         return res.json({ data: transactions });
       } else {
         const [transactions]: Array<any> = await db.query(
-          `SELECT B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category, D.name as transactiontype, A.name as account, A.balance as accountbalance, E.name as paymentmethod, F.name as project, G.name as user
-        FROM account A
-        INNER JOIN transaction B ON B.account_id=A.id
-        LEFT JOIN category C ON C.id = B.category_id
-        LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
-        LEFT JOIN payment_method E ON E.id = B.payment_method_id
-        INNER JOIN project F ON F.id = A.project_id
-        INNER JOIN user G on G.id = F.user_id
-        WHERE A.project_id = ?
-        ORDER BY B.date DESC LIMIT 30;
+          `SELECT
+             B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category,
+              D.name as transactiontype, A.name as account, B.balance as accountbalance,
+              E.name as paymentmethod, F.name as project, G.name as user
+            FROM 
+              account A
+              INNER JOIN transaction B ON B.account_id=A.id
+              LEFT JOIN category C ON C.id = B.category_id
+              LEFT JOIN transaction_type D ON D.id = B.transaction_type_id
+              LEFT JOIN payment_method E ON E.id = B.payment_method_id
+              INNER JOIN project F ON F.id = A.project_id
+              INNER JOIN user G on G.id = F.user_id
+            WHERE
+              A.project_id = ?
+              ORDER BY B.id DESC LIMIT 30;
       `,
           [projectId]
         );

@@ -15,7 +15,8 @@ import { ArrowRight, ArrowRightAlt } from "@mui/icons-material";
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
-  const { transactions } = useTransactions(selectedProject);
+  const { transactions, triggerRefetch: fetchTransactions } =
+    useTransactions(selectedProject);
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
@@ -24,7 +25,7 @@ const HomePage = () => {
         Hello {user.name}!
       </Typography>
       <Divider />
-      <Accounts selectedProject={selectedProject} />
+      <Accounts />
       <Divider />
       <TransactionButtons transactions={transactions} />
       {navItems.map((item, idx) => (
@@ -60,7 +61,11 @@ const HomePage = () => {
         }}
       >
         {transactions?.map((transaction: any) => (
-          <Transaction key={transaction.id} transaction={transaction} />
+          <Transaction
+            fetchTransactions={fetchTransactions}
+            key={transaction.id}
+            transaction={transaction}
+          />
         ))}
       </List>
     </Box>

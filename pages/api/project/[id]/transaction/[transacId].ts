@@ -10,17 +10,18 @@ export default async function handler(
     const { transacId: transactionId } = req.query;
     try {
       const [result]: Array<any> = await db.query(
-        "SELECT * FROM transaction WHERE id = ?",
+        "SELECT * FROM transaction WHERE id = ?;",
         [transactionId]
       );
-      await db.query("UPDATE account SET balance -= ? WHERE id = ?", [
+      await db.query("UPDATE account SET balance = balance - ? WHERE id = ?;", [
         result[0].amount,
         result[0].account_id,
       ]);
       await db.query(
-        "UPDATE transaction SET balance -= ? WHERE account_id = ?",
-        [result[0].amount, result[0].account_id]
+        "UPDATE transaction SET balance = balance - ? WHERE account_id = ? AND id > ?;",
+        [result[0].amount, result[0].account_id, transactionId]
       );
+      await db.query("DELETE FROM transaction WHERE id = ?;", [transactionId]);
       return res.status(200).send("Success");
     } catch (error) {
       console.log(error);

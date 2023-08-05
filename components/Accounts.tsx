@@ -3,7 +3,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import useAccounts from "@/hooks/useAccounts";
 import IAccount from "@/interfaces/IAccount";
 import InboxIcon from "@mui/icons-material/Inbox";
 import { Box, IconButton, Typography } from "@mui/material";
@@ -14,15 +13,12 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
 import Account from "./Account";
+import { useAccountsContext } from "@/context/AccountContext";
 
-function Accounts({ selectedProject }: { selectedProject: number }) {
+function Accounts() {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [showTotal, setShowTotal] = useState<boolean>(false);
-  const {
-    accounts,
-    loading: loadingAccounts,
-    error,
-  } = useAccounts(selectedProject);
+  const { accounts, loading: loadingAccounts, error } = useAccountsContext();
 
   const toggleShowAll = () => {
     setShowAll((prev) => !prev);

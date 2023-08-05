@@ -16,11 +16,21 @@ import {
 import Money from "@mui/icons-material/Money";
 import { format } from "date-fns";
 import { ArrowDropDown, ArrowDropUp, MoreVert } from "@mui/icons-material";
+import axios from "axios";
+import { useProjectContext } from "@/context/ProjectContext";
+import { useAccountsContext } from "@/context/AccountContext";
 
-function Transaction({ transaction }: any) {
-  const [showDescription, setShowDescription] = useState(false);
+type props = {
+  transaction: any;
+  fetchTransactions: () => void;
+};
+
+function Transaction({ transaction, fetchTransactions }: props) {
+  const [showDescription, setShowDescription] = useState(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { selectedProject } = useProjectContext();
+  const { triggerRefetch: fetchAccounts } = useAccountsContext();
 
   const toggleShowDescription = () => {
     setShowDescription((prev) => !prev);
@@ -31,10 +41,19 @@ function Transaction({ transaction }: any) {
   const handleDelete = async () => {
     if (isDeleting) return;
     setIsDeleting(true);
-    setTimeout(() => {
+    try {
+      const result = await axios.delete(
+        `/api/project/${selectedProject}/transaction/${transaction.id}`
+      );
       setAnchorEl(null);
+      fetchAccounts();
+      fetchTransactions();
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsDeleting(false);
-    }, 1500);
+    }
   };
   return (
     <ListItem
@@ -111,7 +130,8 @@ function Transaction({ transaction }: any) {
               {showDescription && (
                 <Typography variant="body2">
                   {transaction.category}
-                  {transaction.description && ` - ${transaction.description}`}
+                  {transaction.description && ` - ${transaction.description}`} -
+                  {transaction.accountbalance}
                 </Typography>
               )}
             </>

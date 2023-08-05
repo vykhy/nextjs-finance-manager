@@ -18,7 +18,11 @@ function Transactions() {
     dayjs(new Date())
   );
   const { selectedProject } = useProjectContext();
-  const { transactions } = useTransactions(selectedProject, startDate, endDate);
+  const { transactions, triggerRefetch: fetchTransactions } = useTransactions(
+    selectedProject,
+    startDate,
+    endDate
+  );
   const transactionService = new TransactionService(transactions);
   const [incomes, expenses] = transactionService.getCategoryData();
   const totalExpense: number = useMemo(() => {
@@ -171,7 +175,11 @@ function Transactions() {
           }}
         >
           {transactions?.map((transaction: any) => (
-            <Transaction key={transaction.id} transaction={transaction} />
+            <Transaction
+              fetchTransactions={fetchTransactions}
+              key={transaction.id}
+              transaction={transaction}
+            />
           ))}
         </List>
       </Box>
