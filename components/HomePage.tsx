@@ -1,5 +1,5 @@
 import { useProjectContext } from "@/context/ProjectContext";
-import React from "react";
+import React, { useEffect } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -10,13 +10,19 @@ import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
 import Transaction from "./Transaction";
-import { ArrowRight, ArrowRightAlt } from "@mui/icons-material";
+import { ArrowRightAlt } from "@mui/icons-material";
+import { useAccountsContext } from "@/context/AccountContext";
 
 const HomePage = () => {
   const { user } = useAuthContext();
   const { selectedProject } = useProjectContext();
+  const { triggerRefetch: fetchAccounts } = useAccountsContext();
   const { transactions, triggerRefetch: fetchTransactions } =
     useTransactions(selectedProject);
+
+  useEffect(() => {
+    fetchAccounts();
+  }, []);
 
   return (
     <Box style={{ backgroundColor: "white", color: "black" }} p={1}>
