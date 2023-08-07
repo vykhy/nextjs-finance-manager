@@ -26,7 +26,7 @@ type props = {
 };
 
 function Transaction({ transaction, fetchTransactions }: props) {
-  const [showDescription, setShowDescription] = useState(true);
+  const [showDescription, setShowDescription] = useState(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { selectedProject } = useProjectContext();
@@ -130,8 +130,7 @@ function Transaction({ transaction, fetchTransactions }: props) {
               {showDescription && (
                 <Typography variant="body2">
                   {transaction.category}
-                  {transaction.description && ` - ${transaction.description}`} -
-                  {transaction.accountbalance}
+                  {transaction.description && ` - ${transaction.description}`}
                 </Typography>
               )}
             </>
