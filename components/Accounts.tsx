@@ -5,7 +5,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import IAccount from "@/interfaces/IAccount";
 import InboxIcon from "@mui/icons-material/Inbox";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Skeleton, Typography } from "@mui/material";
 import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { List } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -65,9 +65,32 @@ function Accounts() {
           <AddIcon />
         </IconButton>
       </Box>
+      {loadingAccounts && !accounts.length ? (
+        <>
+          {new Array(3).fill(1).map((num, i) => (
+            <Box key={i}>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Skeleton
+                  sx={{ mr: 2 }}
+                  variant="circular"
+                  height={40}
+                  width={40}
+                />
+                <Skeleton variant="text" height={30} width={"80%"} />
+              </Box>
 
-      {loadingAccounts ? (
-        "Loading accounts..."
+              <Skeleton
+                sx={{
+                  mb: 2,
+                }}
+                variant="rounded"
+                animation="wave"
+                height={60}
+                width={"100%"}
+              />
+            </Box>
+          ))}
+        </>
       ) : accounts.length ? (
         <>
           <List>

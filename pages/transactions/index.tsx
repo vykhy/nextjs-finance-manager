@@ -3,7 +3,14 @@ import Transaction from "@/components/Transaction";
 import { useProjectContext } from "@/context/ProjectContext";
 import useTransactions from "@/hooks/useTransactions";
 import TransactionService from "@/services/TransactionService";
-import { Box, Card, CardContent, List, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  List,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subDays } from "date-fns";
 import dayjs, { Dayjs } from "dayjs";
@@ -168,20 +175,49 @@ function Transactions() {
             height={"350px"}
           />
         </Box>
-        <List
-          style={{
-            border: "1px solid gray",
-            borderRadius: "15px",
-          }}
-        >
-          {transactions?.map((transaction: any) => (
-            <Transaction
-              fetchTransactions={fetchTransactions}
-              key={transaction.id}
-              transaction={transaction}
-            />
-          ))}
-        </List>
+        {transactions.length ? (
+          <List
+            style={{
+              border: "1px solid gray",
+              borderRadius: "15px",
+            }}
+          >
+            {transactions?.map((transaction: any) => (
+              <Transaction
+                fetchTransactions={fetchTransactions}
+                key={transaction.id}
+                transaction={transaction}
+              />
+            ))}
+          </List>
+        ) : (
+          <>
+            {new Array(10).fill(1).map((num, idx) => (
+              <Box sx={{ width: "90%", marginLeft: "5%" }} key={idx}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                  <Skeleton
+                    sx={{ mr: 2 }}
+                    variant="circular"
+                    height={40}
+                    width={40}
+                  />
+                  <Box width={"100%"}>
+                    <Skeleton variant="text" height={30} width={"40%"} />
+                    <Skeleton
+                      sx={{
+                        mb: 2,
+                      }}
+                      variant="rounded"
+                      animation="wave"
+                      height={60}
+                      width={"100%"}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            ))}
+          </>
+        )}
       </Box>
     </Layout>
   );
