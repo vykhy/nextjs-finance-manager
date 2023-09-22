@@ -50,6 +50,13 @@ const HomePage = () => {
           </ListItemButton>
         </Link>
       ))}
+      <Link href={"/test/colorpicker"}>
+        <ListItemButton>
+          <ListItem disablePadding>
+            <ListItemText primary="Color picker" style={{ color: "black" }} />
+          </ListItem>
+        </ListItemButton>
+      </Link>
       <Divider />
 
       <Link href={`/transactions`}>
