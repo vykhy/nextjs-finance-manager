@@ -6,7 +6,7 @@ const useTransactions = (
   projectId: number,
   startDate: Dayjs | null | undefined = undefined,
   endDate: Dayjs | null | undefined = undefined,
-  search: string
+  search: string = ""
 ) => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
