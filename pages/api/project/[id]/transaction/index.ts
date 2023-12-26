@@ -70,11 +70,12 @@ export default async function handler(
     const { id: projectId } = req.query;
     const startDate = req.query.startDate as string | number;
     const endDate = req.query.endDate as string | number;
+    const search = (req.query.search || "") as string;
     try {
       if (startDate != "undefined") {
         const [transactions]: Array<any> = await db.query(
           `SELECT 
-            B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category,
+            B.id, B.date, B.amount, B.item, B.description, C.name as category,
               D.name as transactiontype, A.name as account, B.balance as accountbalance, 
               E.name as paymentmethod, F.name as project, G.name as user
         FROM 
@@ -88,6 +89,7 @@ export default async function handler(
         WHERE 
           A.project_id = ?
           AND DATE(B.date) BETWEEN ? AND ?
+          AND CONCAT(B.id, B.amount, B.item, B.description, C.name) LIKE CONCAT('%', ?, '%')
           ORDER BY B.id DESC;
         ;
       `,
@@ -95,6 +97,7 @@ export default async function handler(
             projectId,
             format(new Date(startDate), "yyyy-MM-dd"),
             format(new Date(endDate), "yyyy-MM-dd"),
+            search,
           ]
         );
         return res.json({ data: transactions });
@@ -114,6 +117,7 @@ export default async function handler(
               INNER JOIN user G on G.id = F.user_id
             WHERE
               A.project_id = ?
+              AND CONCAT(B.id, B.amount, B.item, B.description, C.name) LIKE CONCAT('%', ?, '%')
               ORDER BY B.id DESC LIMIT 30;
       `,
           [projectId]

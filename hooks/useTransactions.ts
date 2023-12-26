@@ -5,7 +5,8 @@ import { Dayjs } from "dayjs";
 const useTransactions = (
   projectId: number,
   startDate: Dayjs | null | undefined = undefined,
-  endDate: Dayjs | null | undefined = undefined
+  endDate: Dayjs | null | undefined = undefined,
+  search: string
 ) => {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,12 +18,14 @@ const useTransactions = (
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchTransactions = async () => {
       if (!projectId) return;
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `/api/project/${projectId}/transaction?startDate=${startDate}&endDate=${endDate}`
+          `/api/project/${projectId}/transaction?startDate=${startDate}&endDate=${endDate}&search=${search}`,
+          { signal: controller.signal }
         );
         setTransactions(response.data.data);
       } catch (err: any) {
@@ -32,7 +35,8 @@ const useTransactions = (
       }
     };
     fetchTransactions();
-  }, [projectId, startDate, endDate, trigger]);
+    return () => controller.abort();
+  }, [projectId, startDate, endDate, search, trigger]);
 
   return { transactions, isLoading, error, triggerRefetch };
 };

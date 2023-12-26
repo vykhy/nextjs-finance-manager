@@ -9,6 +9,7 @@ import {
   CardContent,
   List,
   Skeleton,
+  TextField,
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -24,11 +25,13 @@ function Transactions() {
   const [endDate, setEndDate] = useState<Dayjs | null | undefined>(
     dayjs(new Date())
   );
+  const [search, setSearch] = useState<string>("");
   const { selectedProject } = useProjectContext();
   const { transactions, triggerRefetch: fetchTransactions } = useTransactions(
     selectedProject,
     startDate,
-    endDate
+    endDate,
+    search
   );
   const transactionService = new TransactionService(transactions);
   const [incomes, expenses] = transactionService.getCategoryData();
@@ -67,11 +70,20 @@ function Transactions() {
         sx={{
           backgroundColor: "white",
           minHeight: "100vh",
+          width: "100%",
+          margin: "auto",
         }}
       >
         <Typography sx={{ p: 1 }} color={"black"} variant="h4">
           Transactions
         </Typography>
+        <Box style={{ width: "100%", paddingLeft: "10%", paddingRight: "10%" }}>
+          <TextField
+            fullWidth
+            placeholder="Search"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Box>
         <Box
           sx={{
             display: "flex",
@@ -82,22 +94,14 @@ function Transactions() {
             mb: 2,
           }}
         >
-          <Box
-            sx={{
-              width: "45%",
-            }}
-          >
+          <Box>
             <Typography>Date: </Typography>
             <DatePicker
               value={startDate}
               onChange={(newValue) => setStartDate(newValue)}
             />
           </Box>
-          <Box
-            sx={{
-              width: "45%",
-            }}
-          >
+          <Box>
             <Typography>Date: </Typography>
             <DatePicker
               value={endDate}
@@ -105,6 +109,7 @@ function Transactions() {
             />
           </Box>
         </Box>
+
         <Box
           sx={{
             display: "flex",
