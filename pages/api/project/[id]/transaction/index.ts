@@ -120,7 +120,7 @@ export default async function handler(
               AND CONCAT(B.id, B.amount, B.item, B.description, C.name) LIKE CONCAT('%', ?, '%')
               ORDER BY B.id DESC LIMIT 30;
       `,
-          [projectId]
+          [projectId, search]
         );
         return res.json({ data: transactions });
       }
