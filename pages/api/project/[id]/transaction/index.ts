@@ -88,8 +88,8 @@ export default async function handler(
           INNER JOIN user G on G.id = F.user_id
         WHERE 
           A.project_id = ?
-          AND DATE(B.date) BETWEEN ? AND ?
-          AND CONCAT(B.id, B.amount, B.item, B.description, C.name) LIKE CONCAT('%', ?, '%')
+          AND DATE(B.date) BETWEEN ? AND ? 
+          AND CONCAT(B.id, B.amount, B.item, B.description, COALESCE(C.name, "")) LIKE CONCAT('%', ?, '%')
           ORDER BY B.id DESC;
         ;
       `,
@@ -102,6 +102,7 @@ export default async function handler(
         );
         return res.json({ data: transactions });
       } else {
+        // summary only -> no search or date range filter
         const [transactions]: Array<any> = await db.query(
           `SELECT
              B.id, B.date, B.amount, B.item, B.amount, B.description, C.name as category,
@@ -117,10 +118,9 @@ export default async function handler(
               INNER JOIN user G on G.id = F.user_id
             WHERE
               A.project_id = ?
-              AND CONCAT(B.id, B.amount, B.item, B.description, C.name) LIKE CONCAT('%', ?, '%')
               ORDER BY B.id DESC LIMIT 30;
       `,
-          [projectId, search]
+          [projectId]
         );
         return res.json({ data: transactions });
       }
