@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "@/server/helpers/db";
-import IProject from "@/interfaces/IProject";
 
 export default async function handler(
   req: NextApiRequest,

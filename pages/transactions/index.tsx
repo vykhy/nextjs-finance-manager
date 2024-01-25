@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import MonthlyGraph from "@/components/MonthlyGraph";
 import Transaction from "@/components/Transaction";
 import { useProjectContext } from "@/context/ProjectContext";
 import useTransactions from "@/hooks/useTransactions";
@@ -140,6 +141,7 @@ function Transactions() {
             </CardContent>
           </Card>
         </Box>
+
         <Box style={{ display: "flex", flexWrap: "wrap" }}>
           <Chart
             chartType="PieChart"
@@ -179,6 +181,17 @@ function Transactions() {
             width={"400px"}
             height={"350px"}
           />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            width: "100%",
+            flexWrap: "wrap",
+            justifyContent: "space-evenly",
+            aligntItems: "center",
+          }}
+        >
+          <MonthlyGraph />
         </Box>
         {transactions.length ? (
           <List
