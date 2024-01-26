@@ -27,7 +27,7 @@ function MonthlyGraph() {
       columns={monthlyData.map((item) => item.month)}
       data={chartData}
       width="100%"
-      height="600px"
+      height="500px"
       options={{
         title: "Monthly Summary",
         curveType: "function",

@@ -9,7 +9,8 @@ export default async function handler(
     const { id: projectId } = req.query;
     const [data]: Array<any> = await db.query(
       `
-       
+       SELECT * FROM
+        (
             SELECT 
                 SUM(CASE WHEN A.amount > 0 THEN A.amount ELSE 0 END) as inflow, 
                 SUM(CASE WHEN A.amount < 0 THEN (A.amount * -1) ELSE 0 END) as outflow, 
@@ -24,7 +25,9 @@ export default async function handler(
                 DATE_FORMAT(A.date, '%Y-%m')
             ORDER BY 
                 DATE_FORMAT(A.date, '%Y-%m') DESC
-            LIMIT 12;
+            LIMIT 12
+          ) AS B
+          ORDER BY B.month ASC;
         `,
       [projectId]
     );
