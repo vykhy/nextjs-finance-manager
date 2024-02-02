@@ -78,4 +78,5 @@ const TransactionList = React.memo(
   }
 );
 
+TransactionList.displayName = "TransactionList";
 export default TransactionList;

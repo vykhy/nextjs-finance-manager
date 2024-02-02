@@ -22,6 +22,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchAccounts();
+    // eslint-disable-next-line
   }, []);
 
   return (
