@@ -3,20 +3,12 @@ import React, { useEffect } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import {
-  Box,
-  Divider,
-  IconButton,
-  List,
-  Skeleton,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { useAuthContext } from "@/context/AuthContext";
 import Link from "next/link";
 import useTransactions from "@/hooks/useTransactions";
 import Accounts from "./Accounts";
 import TransactionButtons from "./AddTransactionsSection";
-import Transaction from "./Transaction";
 import { ArrowRightAlt } from "@mui/icons-material";
 import { useAccountsContext } from "@/context/AccountContext";
 import TransactionList from "./TransactionList";
