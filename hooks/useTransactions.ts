@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Dayjs } from "dayjs";
+import { TransactionType } from "@/components/TransactionList";
 
 const useTransactions = (
   projectId: number,
@@ -8,14 +9,14 @@ const useTransactions = (
   endDate: Dayjs | null | undefined = undefined,
   search: string = ""
 ) => {
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Array<TransactionType>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [trigger, setTrigger] = useState<boolean>(false);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  const triggerRefetch = () => {
+  const triggerRefetch = useCallback(() => {
     setTrigger(!trigger);
-  };
+  }, [trigger]);
 
   useEffect(() => {
     const controller = new AbortController();

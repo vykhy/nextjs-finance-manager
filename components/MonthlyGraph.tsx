@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import IMonthlyData from "@/interfaces/IMonthlyData";
 import axios from "axios";
 import { useProjectContext } from "@/context/ProjectContext";
-import { Typography } from "@mui/material";
 import Chart from "react-google-charts";
 
 function MonthlyGraph() {

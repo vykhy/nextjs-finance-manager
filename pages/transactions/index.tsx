@@ -1,18 +1,10 @@
 import Layout from "@/components/Layout";
 import MonthlyGraph from "@/components/MonthlyGraph";
-import Transaction from "@/components/Transaction";
+import TransactionList from "@/components/TransactionList";
 import { useProjectContext } from "@/context/ProjectContext";
 import useTransactions from "@/hooks/useTransactions";
 import TransactionService from "@/services/TransactionService";
-import {
-  Box,
-  Card,
-  CardContent,
-  List,
-  Skeleton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { subDays } from "date-fns";
 import dayjs, { Dayjs } from "dayjs";
@@ -36,6 +28,7 @@ function Transactions() {
   );
   const transactionService = new TransactionService(transactions);
   const [incomes, expenses] = transactionService.getCategoryData();
+
   const totalExpense: number = useMemo(() => {
     return transactions?.reduce(
       (total: number, transaction: any) =>
@@ -50,6 +43,7 @@ function Transactions() {
       Number(0)
     );
   }, [transactions]);
+
   const totalIncome: number = useMemo(() => {
     return transactions?.reduce(
       (total: number, transaction: any) =>
@@ -64,6 +58,24 @@ function Transactions() {
       Number(0)
     );
   }, [transactions]);
+
+  const incomePieChartData = useMemo(() => {
+    return incomes
+      ? [
+          ["Category", "Amount"],
+          ...incomes.map((item) => [item.category, Math.abs(item.amount)]),
+        ]
+      : ["Category", "Amount"];
+  }, [incomes]);
+
+  const expensePieChartData = useMemo(() => {
+    return expenses
+      ? [
+          ["Category", "Amount"],
+          ...expenses.map((item) => [item.category, Math.abs(item.amount)]),
+        ]
+      : ["Category", "Amount"];
+  }, [expenses]);
 
   return (
     <Layout>
@@ -141,21 +153,10 @@ function Transactions() {
             </CardContent>
           </Card>
         </Box>
-
         <Box style={{ display: "flex", flexWrap: "wrap" }}>
           <Chart
             chartType="PieChart"
-            data={
-              incomes
-                ? [
-                    ["Category", "Amount"],
-                    ...incomes.map((item) => [
-                      item.category,
-                      Math.abs(item.amount),
-                    ]),
-                  ]
-                : ["Category", "Amount"]
-            }
+            data={incomePieChartData}
             options={{
               title: "Income Categories",
             }}
@@ -164,17 +165,7 @@ function Transactions() {
           />
           <Chart
             chartType="PieChart"
-            data={
-              expenses
-                ? [
-                    ["Category", "Amount"],
-                    ...expenses.map((item) => [
-                      item.category,
-                      Math.abs(item.amount),
-                    ]),
-                  ]
-                : ["Category", "Amount"]
-            }
+            data={expensePieChartData}
             options={{
               title: "Expense Categories",
             }}
@@ -193,49 +184,10 @@ function Transactions() {
         >
           <MonthlyGraph />
         </Box>
-        {transactions.length ? (
-          <List
-            style={{
-              border: "1px solid gray",
-              borderRadius: "15px",
-            }}
-          >
-            {transactions?.map((transaction: any) => (
-              <Transaction
-                fetchTransactions={fetchTransactions}
-                key={transaction.id}
-                transaction={transaction}
-              />
-            ))}
-          </List>
-        ) : (
-          <>
-            {new Array(10).fill(1).map((num, idx) => (
-              <Box sx={{ width: "90%", marginLeft: "5%" }} key={idx}>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                  <Skeleton
-                    sx={{ mr: 2 }}
-                    variant="circular"
-                    height={40}
-                    width={40}
-                  />
-                  <Box width={"100%"}>
-                    <Skeleton variant="text" height={30} width={"40%"} />
-                    <Skeleton
-                      sx={{
-                        mb: 2,
-                      }}
-                      variant="rounded"
-                      animation="wave"
-                      height={60}
-                      width={"100%"}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            ))}
-          </>
-        )}
+        <TransactionList
+          fetchTransactions={fetchTransactions}
+          transactions={transactions}
+        />
       </Box>
     </Layout>
   );

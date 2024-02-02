@@ -19,9 +19,10 @@ import { ArrowDropDown, ArrowDropUp, MoreVert } from "@mui/icons-material";
 import axios from "axios";
 import { useProjectContext } from "@/context/ProjectContext";
 import { useAccountsContext } from "@/context/AccountContext";
+import { TransactionType } from "./TransactionList";
 
 type props = {
-  transaction: any;
+  transaction: TransactionType;
   fetchTransactions: () => void;
 };
 
