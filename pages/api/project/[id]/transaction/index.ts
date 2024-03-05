@@ -90,7 +90,7 @@ export default async function handler(
           A.project_id = ?
           AND DATE(B.date) BETWEEN ? AND ? 
           AND CONCAT(B.id, B.amount, B.item, B.description, COALESCE(C.name, "")) LIKE CONCAT('%', ?, '%')
-          ORDER BY B.id DESC;
+          ORDER BY B.date DESC;
         ;
       `,
           [
@@ -118,7 +118,7 @@ export default async function handler(
               INNER JOIN user G on G.id = F.user_id
             WHERE
               A.project_id = ?
-              ORDER BY B.id DESC LIMIT 30;
+              ORDER BY B.date DESC LIMIT 30;
       `,
           [projectId]
         );
