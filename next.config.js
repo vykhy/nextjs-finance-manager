@@ -11,4 +11,6 @@ module.exports = withPWA({
     config.experiments = { ...config.experiments, topLevelAwait: true };
     return config;
   },
+  swcMinify: true,
+  productionBrowserSourceMaps: false,
 });

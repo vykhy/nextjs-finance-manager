@@ -71,6 +71,7 @@ export default async function handler(
     const startDate = req.query.startDate as string | number;
     const endDate = req.query.endDate as string | number;
     const search = (req.query.search || "") as string;
+
     try {
       if (startDate != "undefined") {
         const [transactions]: Array<any> = await db.query(
