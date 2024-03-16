@@ -126,8 +126,6 @@ export default async function handler(
         .json({ message: "Failed to update receiver account" });
     }
 
-    await db.commit();
-
     // Return the transfer record
     const [transfers]: Array<any> = await db.query(
       `SELECT A.id, A.amount, A.description, A.date, B.name as sender_account, C.name as receiver_account

@@ -50,7 +50,6 @@ export default async function handler(
         return res.status(500).json({ message: "Failed to update account" });
       }
 
-      await db.commit();
       return res.status(200).json({
         message: `Balance for account with ID ${accountId} has been corrected to ${endBalance}`,
         data: { accountId, balance: endBalance },
