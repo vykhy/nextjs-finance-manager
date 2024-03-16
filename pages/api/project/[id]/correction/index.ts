@@ -22,8 +22,6 @@ export default async function handler(
     }
 
     try {
-      await db.beginTransaction();
-
       // Update transaction table with correction entry
       const [transactionResult]: any = await db.query(
         `INSERT INTO transaction ( account_id, item, amount, balance, description, date)
@@ -38,7 +36,6 @@ export default async function handler(
         ]
       );
       if (!transactionResult.insertId) {
-        await db.rollback();
         return res.status(500).json({ message: "Failed to add correction" });
       }
       // Update account balance
@@ -47,7 +44,6 @@ export default async function handler(
         [endBalance, accountId]
       );
       if (accountResult.changedRows <= 0) {
-        await db.rollback();
         await db.query(`DELETE FROM transaction WHERE id = ?`, [
           transactionResult.insertId,
         ]);
@@ -61,7 +57,6 @@ export default async function handler(
       });
     } catch (error: any) {
       console.log(error.message);
-      await db.rollback();
       return res.status(500).json({ message: error.message });
     }
   }

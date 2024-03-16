@@ -16,14 +16,13 @@ export default async function handler(
       "SELECT balance, name FROM account WHERE id = ?",
       [fromAccountId]
     );
-    console.log(senderAccount[0], amount, senderAccount[0].balance < amount);
+
     if (
       Number(senderAccount[0].balance) < amount &&
       !senderAccount[0].name.toLowerCase().includes("loan")
     ) {
       return res.status(400).json({ message: "Insufficient balance" });
     }
-    await db.beginTransaction();
 
     // Insert into transfer table
     const [transferResult]: any = await db.query(
@@ -38,7 +37,6 @@ export default async function handler(
       ]
     );
     if (!transferResult.insertId) {
-      await db.rollback();
       return res.status(500).json({ message: "Failed to add transfer" });
     }
 
@@ -59,7 +57,6 @@ export default async function handler(
       ]
     );
     if (!senderTransaction.insertId) {
-      await db.rollback();
       await db.query(`DELETE FROM transfer WHERE id = ?`, [
         transferResult.insertId,
       ]);
@@ -81,7 +78,6 @@ export default async function handler(
       ]
     );
     if (!receiverTransaction.insertId) {
-      await db.rollback();
       await db.query(`DELETE FROM transaction WHERE id = ?`, [
         senderTransaction.insertId,
       ]);
@@ -96,7 +92,6 @@ export default async function handler(
       [amount, fromAccountId]
     );
     if (senderAccountResult.changedRows <= 0) {
-      await db.rollback();
       await db.query(`DELETE FROM transaction WHERE id IN (?, ?)`, [
         senderTransaction.insertId,
         receiverTransaction.insertId,
@@ -115,7 +110,6 @@ export default async function handler(
       [amount, toAccountId]
     );
     if (receiverAccountResult.changedRows <= 0) {
-      await db.rollback();
       await db.query(`DELETE FROM transaction WHERE id IN (?, ?)`, [
         senderTransaction.insertId,
         receiverTransaction.insertId,
@@ -145,7 +139,6 @@ export default async function handler(
     res.json({ data: transfers[0] });
   } catch (error: any) {
     console.log(error.message);
-    await db.rollback();
     return res.status(500).json({ message: error.message });
   }
 }
